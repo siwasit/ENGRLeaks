@@ -1,0 +1,39 @@
+# Ignore node_modules for Next.js project
+frontend/node_modules/
+
+# Ignore build output, logs, and other files from Next.js
+frontend/.next/
+frontend/.eslintcache
+frontend/package-lock.json
+frontend/yarn.lock
+
+# Ignore Django virtual environment and compiled files
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+
+# Ignore .env and local environment variables
+frontend/.env
+backend/.env
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+
+# Ignore system-specific files
+.DS_Store    # macOS
+Thumbs.db    # Windows
+
+# Ignore database files (if applicable)
+backend/db.sqlite3
+
+# Ignore compiled assets (if generated)
+frontend/out/
+
+# Ignore logs
+frontend/logs/
+backend/logs/
+
+# Ignore temporary files (e.g., during testing or development)
+frontend/tmp/
+backend/tmp/
