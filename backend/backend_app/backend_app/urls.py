@@ -17,18 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from ENGRBackend import views
+from ENGRBackend.views import user_views, course_views, enrollment_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.hello_world, name='hello_world'),
-    path('lessons/', views.get_all_lessons, name='get_all_lessons'),
-    path('users/', views.get_all_users, name='get_all_users'),
-    path('enrollments/<int:user_id>/', views.get_enrollments_by_user, name='get_enrollments_by_user'),
-    path('users/<int:user_id>/', views.get_user_byid, name='get_user_byid'),
-    path('courses/', views.get_all_courses, name='get_all_courses'),
-    path('courses/<int:course_id>/', views.get_course_byid, name='get_course_byid'),
-    path('lessons/<int:lesson_id>/', views.get_lesson_byid, name='get_lesson_byid'),
-    path('enrollments/', views.get_all_enrollments, name='get_all_enrollments'),
-    path('lessons/course/<int:course_id>', views.get_all_lessons_by_course, name='get_all_lessons_by_course'),
+    path('lessons/', course_views.get_all_lessons, name='get_all_lessons'),
+    path('users/', user_views.get_all_users, name='get_all_users'),
+    path('enrollments/<int:user_id>/', enrollment_view.get_enrollments_by_user, name='get_enrollments_by_user'),
+    path('users/<int:user_id>/', user_views.get_user_byid, name='get_user_byid'),
+    path('courses/', course_views.get_all_courses, name='get_all_courses'),
+    path('courses/<int:course_id>/', course_views.get_course_byid, name='get_course_byid'),
+    path('lessons/<int:lesson_id>/', course_views.get_lesson_byid, name='get_lesson_byid'),
+    path('enrollments/', enrollment_view.get_all_enrollments, name='get_all_enrollments'),
+    path('lessons/course/<int:course_id>', course_views.get_all_lessons_by_course, name='get_all_lessons_by_course'),
 ]
