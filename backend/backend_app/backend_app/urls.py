@@ -16,11 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from ENGRBackend.views import user_views, course_views, enrollment_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('lessons/', course_views.get_all_lessons, name='get_all_lessons'),
     path('users/', user_views.get_all_users, name='get_all_users'),
     path('enrollments/<int:user_id>/', enrollment_view.get_enrollments_by_user, name='get_enrollments_by_user'),
@@ -30,4 +32,7 @@ urlpatterns = [
     path('lessons/<int:lesson_id>/', course_views.get_lesson_byid, name='get_lesson_byid'),
     path('enrollments/', enrollment_view.get_all_enrollments, name='get_all_enrollments'),
     path('lessons/course/<int:course_id>', course_views.get_all_lessons_by_course, name='get_all_lessons_by_course'),
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
