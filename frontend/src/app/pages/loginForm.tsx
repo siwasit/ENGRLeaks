@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -90,6 +91,8 @@ export default function LoginForm() {
       >
         Login
       </button>
+      <Link href="/register">Register</Link>
+      <Link href="/authenticate">authenticate</Link>
       {error && <p className="text-red-500 text-sm text-center mt-4">{error}</p>}
     </form>
   );

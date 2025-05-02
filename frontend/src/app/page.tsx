@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import LoginForm from "./pages/loginForm";
+import Authenticate from "./authenticate/page";
 export default function Home() {
 
   // This is a simple React component that fetches data from an API and displays it.
@@ -35,7 +36,7 @@ export default function Home() {
     //   )}
     // </div>
     <div>
-      <LoginForm />
+      <Authenticate />
     </div>
   );
 }

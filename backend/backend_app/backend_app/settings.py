@@ -56,7 +56,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000', 'http://192.168.75.1:3000'
+    'http://localhost:3000', 'http://192.168.75.1:3000', 'https://87a5-2405-9800-ba00-ca0-6513-e663-747d-424f.ngrok-free.app'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -75,7 +75,7 @@ CORS_ALLOW_HEADERS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
