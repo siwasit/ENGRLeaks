@@ -1,65 +1,70 @@
-"use client";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+'use client';
+import React from 'react';
+import Image from 'next/image';
+import { FaGithub as Github } from 'react-icons/fa'; // Import Github icon
+import { BiLogoGmail } from 'react-icons/bi';
+import { useEffect, useState } from 'react';
+import { ScrollSmoother } from 'gsap/ScrollSmoother';
+import gsap from 'gsap';
+import Footer from '@/components/footer';
+import Navbar from '@/components/navbar';
 
-const refreshToken = async () => {
-    const refresh_token = localStorage.getItem('refresh_token');
-    if (!refresh_token) {
-      console.error('No refresh token found');
-      return;
-    }
-  
-    try {
-      const res = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
-        refresh: refresh_token,
-      });
-  
-      // Update the access token in localStorage
-      localStorage.setItem('access_token', res.data.access);
-    } catch (error) {
-      console.error('Failed to refresh token', error);
-    }
-  };
-  
-
-export default function Home() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const router = useRouter();
-
-    
-
-    useEffect(() => {
-        const token = localStorage.getItem('access_token');
-        if (!token) {
-            router.push('/');  // Redirect to login page if no token
-        } else {
-            setIsAuthenticated(true);
-        }
-    }, []);
-
-    if (!isAuthenticated) {
-        return <div>Loading...</div>;  // Optionally show a loading spinner
-    }
-
-    const handleLogout = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        setIsAuthenticated(false);
-        router.push('/');  // Redirect to login page
-        // Redirect user to login page
-    };
-
+const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div>
-            <h1>You are authenticated!!!</h1>
-            <button
-                onClick={handleLogout}
-                className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-            >
-                Logout
-            </button>
+        <div className="relative min-h-screen w-full overflow-hidden">
+            {/* Fixed background image */}
+            <div className="absolute top-0 left-0 w-full h-[1000px] z-[-20]">
+                <Image
+                    src="/images/building.png"
+                    alt="Background"
+                    fill
+                    className="object-fit"
+                    priority
+                />
+            </div>
 
+            {/* Gradient over the image */}
+            <div className="absolute top-0 left-0 w-full h-[1000px] z-[-10]"
+                style={{
+                    background: 'linear-gradient(to bottom, rgba(133, 21, 21, 1) 10%, rgba(133, 21, 21, 0) 80%)',
+                }}
+            ></div>
+
+
+            {/* Gradient below image that scrolls with page */}
+            <div className="absolute top-[1000px] left-0 w-full h-full z-[-10]"
+                style={{
+                    background: 'linear-gradient(to bottom right, #FE7474, #FFCB91)',
+                }}
+            ></div>
+
+            {/* Foreground content */}
+            <div className="relative z-10 flex flex-col min-h-screen">
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+            </div>
         </div>
     );
+};
+
+const Home = () => {
+    return (
+        <Layout>
+            <div
+                className="container mx-auto px-6 md:px-10   py-200 flex-grow relative"
+                style={{ minHeight: '60vh' }}
+            >
+                <h1 className="text-4xl font-bold text-center mb-8 text-black">
+                    
+                </h1>
+                {/* <p className="text-lg text-center text-black">
+                    This is a Next.js website with a custom navbar and footer.
+                </p> */}
+
+            </div>
+        </Layout>
+    );
 }
+
+export default Home;

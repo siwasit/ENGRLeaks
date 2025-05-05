@@ -226,7 +226,7 @@ export default function Authenticate() {
                                     >
                                         <option value="">Role</option>
                                         <option value="student">Student</option>
-                                        <option value="teacher">Teacher</option>
+                                        <option value="lecturer">Lecturer</option>
                                     </select>
                                 </div>
                                 <label className="tos-label">
