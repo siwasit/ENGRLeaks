@@ -1,5 +1,6 @@
 # Ignore node_modules for Next.js project
 frontend/node_modules/
+node_modules
 
 # Ignore build output, logs, and other files from Next.js
 frontend/.next/
