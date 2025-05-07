@@ -1,5 +1,5 @@
+// CourseCard.tsx
 import React from 'react';
-import { styleText } from 'util';
 
 interface CourseCardProps {
     title: string;

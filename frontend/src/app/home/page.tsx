@@ -1,19 +1,10 @@
-'use client';
+//home/page.tsx
 import React from 'react';
 import Image from 'next/image';
-import { FaGithub as Github } from 'react-icons/fa'; // Import Github icon
-import { BiLogoGmail } from 'react-icons/bi';
-import { useEffect, useState } from 'react';
-import { ScrollSmoother } from 'gsap/ScrollSmoother';
-import gsap from 'gsap';
 import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
 import QuizWrapper from '@/components/landing_page_quiz';
-import CourseCard from '@/components/course_card';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDownWideShort, faArrowUpWideShort } from '@fortawesome/free-solid-svg-icons';
-import SearchBar from '@/components/search_bar';
-import { ToggleButton } from '@/components/toggle_button';
+import CourseFilteringSection from '@/components/course_filtering_section';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -55,59 +46,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 };
 
 const Home = () => {
-    const [query, setQuery] = useState('');
-    const [sortBy, setSortBy] = useState<'title' | 'lecturer' | null>(null);
-
-    const [active, setActive] = useState('');
-
-    const toggleSwitchButton = () => {
-        setActive((prev) => (prev === 'Title' ? 'Lecturer' : 'Title'));
-    };
-
-    const courses = [
-        {
-            title: "HTML",
-            lecturer: "Akkrawoot Takhom",
-            description: "Lorem ipsum dolor sit amet...",
-            totalLessons: 20,
-            totalExercises: 40,
-            status: "Resume",
-        },
-        {
-            title: "CSS",
-            lecturer: "Worayot Liamkaew",
-            description: "Lorem ipsum dolor sit amet...",
-            totalLessons: 20,
-            totalExercises: 40,
-            status: "Enroll now!",
-        },
-        {
-            title: "JS",
-            lecturer: "Siwasit Saengnikun",
-            description: "Lorem ipsum dolor sit amet...",
-            totalLessons: 20,
-            totalExercises: 40,
-            status: "Finished",
-        },
-        {
-            title: "JS",
-            lecturer: "Siwasit Saengnikun",
-            description: "Lorem ipsum dolor sit amet...",
-            totalLessons: 20,
-            totalExercises: 40,
-            status: "Unenroll",
-        },
-    ];
-
-    const filteredCourses = courses.filter(course =>
-        course.title.toLowerCase().includes(query.toLowerCase())
-    );
-
-    const sortedCourses = [...filteredCourses].sort((a, b) => {
-        if (!sortBy) return 0;
-        return a[sortBy].localeCompare(b[sortBy]);
-    });
-
     return (
         <Layout>
             <div className="container mx-auto pt-200 pb-20 flex-grow relative">
@@ -215,79 +153,7 @@ const Home = () => {
                     </h2>
                 </div>
 
-                <div className="flex flex-row items-center justify-center w-full h-full mt-0 space-x-4">
-                    <SearchBar onSearch={setQuery} />
-
-                    <div
-                        className="space-x-4"
-                    >
-                        <button
-                            className={`shadow-lg relative py-2 px-4 w-35 rounded-lg inline-block`}
-                            style={{
-                                color: active === 'Title'
-                                    ? 'white'
-                                    : '#851515',
-                                background: active === 'Title'
-                                    ? '#851515'
-                                    : 'white',
-                            }}
-                            onClick={() => {
-                                if (active === 'Lecturer' || active === '') {
-                                    toggleSwitchButton();
-                                    setActive('Title');
-                                    setSortBy('title');
-                                } else if (active === 'Title') {
-                                    setActive('');
-                                    setSortBy(null);
-                                }
-                            }}
-                        >
-                            <span className="text-3xl place-items-center space-x-2">
-                                <FontAwesomeIcon icon={faArrowDownWideShort} />
-                                <span>Title</span>
-                            </span>
-                        </button>
-                        <button
-                            className={`shadow-lg py-2 px-4 w-50 rounded-lg`}
-                            style={{
-                                color: active === 'Lecturer'
-                                    ? 'white'
-                                    : '#851515',
-                                background: active === 'Lecturer'
-                                    ? '#851515'
-                                    : 'white',
-                            }}
-                            onClick={() => {
-                                if (active === 'Title' || active === '') {
-                                    toggleSwitchButton();
-                                    setActive('Lecturer');
-                                    setSortBy('lecturer');
-                                } else if (active === 'Lecturer') {
-                                    setActive('');
-                                    setSortBy(null);
-                                }
-                            }}
-                        >
-                            <span className="text-3xl place-items-center space-x-2">
-                                <FontAwesomeIcon icon={faArrowDownWideShort} />
-                                <span>Lecturer</span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 gap-16 mt-14 place-items-center">
-                    {sortedCourses.map((course, index) => (
-                        <CourseCard
-                            key={index}
-                            title={course.title}
-                            lecturer={course.lecturer}
-                            description={course.description}
-                            totalLessons={course.totalLessons}
-                            totalExercises={course.totalExercises}
-                            status={course.status}
-                        />
-                    ))}
-                </div>
+               <CourseFilteringSection></CourseFilteringSection>
             </div>
         </Layout>
     );

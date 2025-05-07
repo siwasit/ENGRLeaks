@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 
 const cn = (...classes: string[]) => classes.filter(Boolean).join(' ');
@@ -12,6 +14,12 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, options, correctA
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [resultText, setResultText] = useState('');
+
+    let textColor = '';
+
+    if (isSubmitted) {
+        textColor = selectedAnswer === correctAnswer ? 'text-green-500' : 'text-red-500';
+    }
 
     const handleValueChange = (value: string) => {
         setSelectedAnswer(value);
@@ -68,7 +76,8 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({ question, options, correctA
                     <span
                         className={cn(
                             "mr-4 font-medium",
-                            resultText === 'Congratulations!' ? "text-green-500" : "text-red-500"
+                            textColor
+                            // resultText === 'Congratulations!' ? "text-green-500" : "text-red-500"
                         )}
                     >
                         {resultText}

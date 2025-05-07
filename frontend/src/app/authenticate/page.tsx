@@ -91,6 +91,7 @@ export default function Authenticate() {
                 }
             } else {
                 setError('Network error. Please try again later.');
+                router.replace('/home'); //! Remove this line when the backend is ready
             }
         }
     };
