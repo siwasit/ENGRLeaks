@@ -54,7 +54,7 @@ const CourseFilteringSection = () => {
 
     return (
         <>
-            <div className="flex flex-row items-center justify-center w-full h-full mt-0 space-x-8">
+            <div className="flex items-center justify-center w-full h-full mt-0 space-x-4">
                 <SearchBar onSearch={setQuery} />
 
                 <div className="space-x-4">

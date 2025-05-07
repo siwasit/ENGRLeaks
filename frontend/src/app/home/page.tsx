@@ -61,7 +61,6 @@ const Home = () => {
                 >
                     ENGRLeaks
                 </p>
-
                 {/* Shadowed Text Behind */}
                 <p
                     className="text-[7.4rem] font-bold text-center mb-8 absolute top-20 left-1/2 transform -translate-x-1/2"
@@ -123,7 +122,7 @@ const Home = () => {
                 </div>
 
                 <div className="flex flex-row justify-between items-center w-full h-full bg-white mt-80" style={{ boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)' }}>
-                    <div className="flex flex-col flex-grow">
+                    <div className="flex flex-col">
                         <div className='p-10'>
                             <h2 className="text-6xl font-bold mb-4 overflow-hidden"
                                 style={{
@@ -142,9 +141,9 @@ const Home = () => {
                             </ul>
                         </div>
                     </div>
-                    <div className='flex flex-row items-center justify-center w-[400px] h-[300px]'
-                        style={{ background: 'linear-gradient(to left, #FE7474, #FFCB91)' }}>
-                        <Image src="/images/tu01.jpg" alt="Web icon" width={400} height={400} className="fill" priority />
+                    
+                    <div className='flex flex-row items-center justify-end h-full'>
+                        <Image src="/images/tu01.jpg" alt="Web icon" width={550} height={0} className="object-cover h-full" priority />
                     </div>
                 </div>
 
