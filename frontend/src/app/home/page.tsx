@@ -40,7 +40,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
             {/* Foreground content */}
             <div className="relative z-10 flex flex-col min-h-screen">
-                <Navbar />
+                <Navbar activePage='Courses' />
                 <main className="flex-1">{children}</main>
                 <Footer />
             </div>
@@ -56,7 +56,7 @@ const Home = () => {
                 style={{ minHeight: '60vh' }}
             >
                 <h1 className="text-4xl font-bold text-center mb-8 text-black">
-                    
+
                 </h1>
                 {/* <p className="text-lg text-center text-black">
                     This is a Next.js website with a custom navbar and footer.

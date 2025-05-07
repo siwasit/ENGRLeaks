@@ -1,5 +1,10 @@
+'use client';
+
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { LogOut } from 'lucide-react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface NavItem {
     label: string;
@@ -14,7 +19,58 @@ const navItems: NavItem[] = [
     // { label: 'Sign in', href: '/' },
 ];
 
-const Navbar = () => {
+interface NavbarProps {
+    activePage: string;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
+
+    const [isLogin, setIsLogin] = useState(false);
+    const router = useRouter();
+
+    const refreshToken = async () => {
+        const refresh_token = localStorage.getItem('refresh_token');
+        if (!refresh_token) {
+            console.error('No refresh token found');
+            return;
+        }
+
+        try {
+            const res = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+                refresh: refresh_token,
+            });
+
+            // Update the access token in localStorage
+            localStorage.setItem('access_token', res.data.access);
+        } catch (error) {
+            console.error('Failed to refresh token', error);
+        }
+    };
+
+    const handleSignIn = () => {
+        router.push('/authenticate');  // Replace with your authentication page route
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        setIsLogin(false);
+        // router.push('/');  // Redirect to login page
+        // Redirect user to login page
+    };
+
+    useEffect(() => {
+        const access_token = localStorage.getItem('access_token');
+        const refresh_token = localStorage.getItem('refresh_token');
+        if (access_token) {
+            console.log('Retrieved Token:', access_token);
+            console.log('Retrieved Token:', refresh_token);
+            setIsLogin(true);
+        } else {
+            console.log('No token found');
+        }
+    }, []);  // Empty dependency array ensures it runs only on client-side mount
+
     return (
         <nav
             className="bg-[#851515] px-2 md:px-10"
@@ -34,26 +90,40 @@ const Navbar = () => {
                             <li key={item.label} className="group">
                                 <a
                                     href={item.href}
-                                    className="text-white font-bold text-[20px] hover:text-primary transition-colors flex items-center relative"
+                                    className={`text-white font-bold text-[20px] hover:text-primary transition-colors flex items-center relative 
+                                        ${activePage === item.label ? 'text-primary' : ''}`}
                                 >
-                                    {item.icon}
                                     {item.label}
-                                    <span className="absolute bottom-[-5px] left-0 w-0 h-[3px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                                    <span className={`absolute bottom-[-5px] left-0 w-0 h-[3px] bg-white transition-all duration-300 group-hover:w-full 
+                                        ${activePage === item.label ? 'w-full' : ''}`}></span>
                                 </a>
                             </li>
                         ))}
                     </ul>
                     <div className='ml-4'>
-                        <a href="/">
+                        {isLogin ? (
+                            <button
+                                className="bg-[#C5211C] py-2 px-4 rounded flex items-center justify-center hover:cursor-pointer hover:bg-[#E90B0B] transition-colors"
+                                style={{ width: '140px', height: '40px' }}
+                                onClick={handleLogout}
+                            >
+                                <LogOut className="text-white h-5 w-5 mr-2" />
+                                <p className="text-white font-bold text-[20px]">
+                                    Sign out
+                                </p>
+                            </button>
+                        ) : (
                             <button
                                 className="bg-[#C5211C] py-2 px-4 rounded flex items-center justify-center hover:cursor-pointer hover:bg-[#E90B0B] transition-colors"
                                 style={{ width: '120px', height: '40px' }}
+                                onClick={handleSignIn}
                             >
                                 <p className="text-white font-bold text-[20px]">
                                     Sign in
                                 </p>
                             </button>
-                        </a>
+                        )
+                        }
                     </div>
                 </div>
             </div>

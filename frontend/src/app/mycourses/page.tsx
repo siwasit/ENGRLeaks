@@ -22,7 +22,7 @@ export default function MyCoursesPage() {
                 }}
             ></div>
             <div className="z-2">
-                <Navbar />
+                <Navbar activePage="My Courses" />
             </div>
             
             <div className="z-2 mx-16 my-8 bg-white p-8 rounded-lg shadow-lg">

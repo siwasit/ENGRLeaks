@@ -21,7 +21,7 @@ export default function CoursePage() {
                 }}
             ></div>
             <div className="z-2">
-                <Navbar />
+                <Navbar activePage="Courses" />
             </div>
 
 

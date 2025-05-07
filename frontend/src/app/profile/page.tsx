@@ -18,7 +18,7 @@ export default function ProfilePage() {
 
     return (
         <div className="relative min-h-screen flex flex-col" style={{ backgroundImage: 'url(/images/plain.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-            <Navbar />
+            <Navbar activePage="Profile" />
 
             <div className="flex relative justify-center items-center">
                 <div className="absolute top-0 left-0 w-full h-full bg-[#FFCB91] opacity-30"></div>
