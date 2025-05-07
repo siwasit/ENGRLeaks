@@ -9,7 +9,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
     { label: 'Courses', href: '/course' },
-    { label: 'My Courses', href: '/my_course' },
+    { label: 'My Courses', href: '/mycourses' },
     { label: 'Profile', href: '/profile' },
     // { label: 'Sign in', href: '/' },
 ];
