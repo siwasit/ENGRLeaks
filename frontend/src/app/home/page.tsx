@@ -79,7 +79,7 @@ const Home = () => {
             description: "Lorem ipsum dolor sit amet...",
             totalLessons: 20,
             totalExercises: 40,
-            status: "Unenrolled",
+            status: "Enroll now!",
         },
         {
             title: "JS",
@@ -88,6 +88,14 @@ const Home = () => {
             totalLessons: 20,
             totalExercises: 40,
             status: "Finished",
+        },
+        {
+            title: "JS",
+            lecturer: "Siwasit Saengnikun",
+            description: "Lorem ipsum dolor sit amet...",
+            totalLessons: 20,
+            totalExercises: 40,
+            status: "Unenroll",
         },
     ];
 
@@ -102,7 +110,7 @@ const Home = () => {
 
     return (
         <Layout>
-            <div className="container mx-auto py-200 flex-grow relative">
+            <div className="container mx-auto pt-200 pb-20 flex-grow relative">
                 {/* Gradient Text Layer */}
                 <p
                     className="text-[7.4rem] font-bold text-center mb-8 absolute top-20 left-1/2 transform -translate-x-1/2 z-10"
@@ -209,7 +217,7 @@ const Home = () => {
 
                 <div className="flex flex-row items-center justify-center w-full h-full mt-0 space-x-4">
                     <SearchBar onSearch={setQuery} />
-                    
+
                     <div
                         className="space-x-4"
                     >
@@ -224,7 +232,7 @@ const Home = () => {
                                     : 'white',
                             }}
                             onClick={() => {
-                                if ( active === 'Lecturer' || active === '') {
+                                if (active === 'Lecturer' || active === '') {
                                     toggleSwitchButton();
                                     setActive('Title');
                                     setSortBy('title');
@@ -264,14 +272,9 @@ const Home = () => {
                                 <FontAwesomeIcon icon={faArrowDownWideShort} />
                                 <span>Lecturer</span>
                             </span>
-                           
                         </button>
-                        
-
                     </div>
-
                 </div>
-
                 <div className="grid grid-cols-1 gap-16 mt-14 place-items-center">
                     {sortedCourses.map((course, index) => (
                         <CourseCard

@@ -27,8 +27,14 @@ const CourseCard: React.FC<CourseCardProps> = ({
         case 'Resume':
             statusColor = 'bg-[#FFB915] text-white';
             break;
-        case 'Unenrolled':
+        case 'Enroll now!':
             statusColor = 'bg-[#28A745] text-white';
+            break;
+        case 'Finished':
+            statusColor = 'bg-orange-400 text-white';
+            break;
+        case 'Unenroll':
+            statusColor = 'bg-red-500 text-white';
             break;
         default:
             statusColor = 'bg-pink-400 text-white';
@@ -109,9 +115,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
                             'w-[13.6rem] py-2 rounded-md font-semibold', // Increased padding
                             statusColor,
                             'transition-colors duration-200',
-                            status === 'Resume' ? 'hover:bg-yellow-600' : '',
-                            status === 'Unenrolled' ? 'hover:bg-green-600' : '',
-                            status !== 'Resume' && status !== 'Unenrolled' ? 'hover:bg-pink-600' : ''
+                            'hover:cursor-pointer',
+                            status === 'Resume' ? 'hover:bg-yellow-500' : '',
+                            status === 'Unenroll' ? 'hover:bg-red-600' : '',
+                            status === 'Finished' ? 'hover:bg-orange-500' : '',
+                            status === 'Enroll now!' ? 'hover:bg-green-700' : '',
                         )}
                     >
                         {status}
