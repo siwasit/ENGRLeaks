@@ -33,7 +33,9 @@ const Footer = () => {
                     <div
                         className="flex items-center text-sm hover:opacity-80 transition-opacity"
                     >
-                        <BiLogoGmail className="mr-1 h-4 w-4" />
+                        <span className="mr-1 h-4 w-4">
+                            <BiLogoGmail />
+                        </span>
                         scig80114@gmail.com
                     </div>
                     <a
@@ -42,7 +44,9 @@ const Footer = () => {
                         rel="noopener noreferrer"
                         className="flex items-center text-sm hover:opacity-80 transition-opacity"
                     >
-                        <Github className="mr-1 h-4 w-4" />
+                        <span className="mr-1 h-4 w-4">
+                            <Github />
+                        </span>
                         github.com/Siwasit
                     </a>
 
@@ -52,7 +56,9 @@ const Footer = () => {
                         rel="noopener noreferrer"
                         className="flex items-center text-sm hover:opacity-80 transition-opacity"
                     >
-                        <Github className="mr-1 h-4 w-4" />
+                        <span className="mr-1 h-4 w-4">
+                            <Github />
+                        </span>
                         github.com/Worayot
                     </a>
                 </div>

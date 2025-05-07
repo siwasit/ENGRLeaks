@@ -37,7 +37,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
             {/* Foreground content */}
             <div className="relative z-10 flex flex-col min-h-screen">
-                <Navbar />
+                <Navbar activePage='Courses' />
                 <main className="flex-1">{children}</main>
                 <Footer />
             </div>
@@ -60,7 +60,6 @@ const Home = () => {
                 >
                     ENGRLeaks
                 </p>
-
                 {/* Shadowed Text Behind */}
                 <p
                     className="text-[7.4rem] font-bold text-center mb-8 absolute top-20 left-1/2 transform -translate-x-1/2"

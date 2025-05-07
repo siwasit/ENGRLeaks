@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import LoginForm from "./pages/loginForm";
 import Authenticate from "./authenticate/page";
-export default function Home() {
+import Home from "./home/page";
+export default function index() {
 
 
   // This is a simple React component that fetches data from an API and displays it.
@@ -37,7 +38,7 @@ export default function Home() {
     //   )}
     // </div>
     <div>
-      <Authenticate />
+      <Home />
     </div>
   );
 }
