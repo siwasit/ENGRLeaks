@@ -5,6 +5,7 @@ import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
 import QuizWrapper from '@/components/landing_page_quiz';
 import CourseFilteringSection from '@/components/course_filtering_section';
+import ParticlesComponent from '@/components/particle';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -36,9 +37,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             ></div>
 
             {/* Foreground content */}
-            <div className="relative z-10 flex flex-col min-h-screen">
-                <Navbar activePage='Courses' />
-                <main className="flex-1">{children}</main>
+            <div className="relative flex flex-col min-h-screen">
+                <Navbar />
+                <main className="flex-1 relative"><div className='z-[-1]'><ParticlesComponent /></div> {children}</main>
                 <Footer />
             </div>
         </div>
@@ -153,6 +154,7 @@ const Home = () => {
                 </div>
 
                <CourseFilteringSection></CourseFilteringSection>
+               
             </div>
         </Layout>
     );
