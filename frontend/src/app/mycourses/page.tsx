@@ -2,6 +2,7 @@
 
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import { useRouter } from 'next/navigation';
 import React, {useState} from "react";
 
 export default function MyCoursesPage() {
@@ -11,6 +12,8 @@ export default function MyCoursesPage() {
         { id: 2, title: "HTML Intermediate", progress: "3/20", enrollDate: "7/5/2568", lecturer: "A. Takhom" },
         { id: 3, title: "HTML Advanced", progress: "3/20", enrollDate: "7/5/2568", lecturer: "A. Takhom" },
     ];
+
+    const router = useRouter();
 
     const [courses, setCourses] = useState(enrolledCourses);
 
@@ -46,8 +49,13 @@ export default function MyCoursesPage() {
                                 <td className="border border-gray-300 px-4 py-2 text-center">{course.enrollDate}</td>
                                 <td className="border border-gray-300 px-4 py-2 text-center">{course.lecturer}</td>
                                 <td className="border flex justify-center space-x-4 border-gray-300 py-2">
-                                    <button className="bg-[#C5211C] cursor-pointer text-white w-20 py-1 rounded hover:bg-[#C5211C] hover:bg-red-600 transition-colors">Unenroll</button>
-                                    <button className="bg-[#28A745] cursor-pointer text-white w-20 py-1 rounded hover:bg-[#28A745] hover:bg-green-500 transition-colors">Resume</button>
+                                    <button className="bg-[#C5211C] cursor-pointer text-white w-20 py-1 rounded hover:bg-red-600 transition-colors">Unenroll</button>
+                                    <button 
+                                        className="bg-[#28A745] cursor-pointer text-white w-20 py-1 rounded hover:bg-green-500 transition-colors"
+                                        onClick={() => router.push('/course')}
+                                    >
+                                        Resume
+                                    </button>
                                 </td>
                             </tr>
                         ))}

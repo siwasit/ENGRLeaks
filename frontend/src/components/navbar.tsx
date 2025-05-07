@@ -13,7 +13,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-    { label: 'Courses', href: '/course' },
+    { label: 'Courses', href: '/' },
     { label: 'My Courses', href: '/mycourses' },
     { label: 'Profile', href: '/profile' },
     // { label: 'Sign in', href: '/' },
