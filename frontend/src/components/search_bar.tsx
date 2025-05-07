@@ -25,7 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder = 'Search...', onSear
     };
 
     return (
-        <div className="flex items-center w-[25%] shadow-lg h-14">
+        <div className="flex items-center shadow-lg h-14">
             <input
                 type="text"
                 placeholder={placeholder}
