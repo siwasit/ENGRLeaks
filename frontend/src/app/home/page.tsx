@@ -38,9 +38,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
             {/* Foreground content */}
             <div className="relative flex flex-col min-h-screen">
-                <Navbar />
-                <main className="flex-1 relative"><div className='z-[-1]'><ParticlesComponent /></div> {children}</main>
-                <Footer />
+                <div className='z-3'><Navbar activePage='' /></div>
+                
+                <main className="flex-1 relative z-2"> {children}</main>
+                <div className='z-[1]'><ParticlesComponent /></div>
+                <div className='relative z-[-1]'><Footer /></div>
             </div>
         </div>
     );
@@ -49,6 +51,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 const Home = () => {
     return (
         <Layout>
+            
             <div className="container mx-auto pt-200 pb-20 flex-grow relative">
                 {/* Gradient Text Layer */}
                 <p

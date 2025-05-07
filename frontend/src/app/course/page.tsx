@@ -2,6 +2,7 @@
 
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import ParticlesComponent from "@/components/particle";
 import CourseHeader from "@/templates/courseHeader";
 import CourseImage from "@/templates/image";
 import MultipleChoiceExercise from "@/templates/multipleChoiceExercise";
@@ -23,6 +24,7 @@ export default function CoursePage() {
             <div className="z-2">
                 <Navbar activePage="" />
             </div>
+            <div className='z-[1]'><ParticlesComponent /></div>
 
 
             <div className="relative z-2 flex-grow flex items-center justify-center">

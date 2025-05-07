@@ -4,6 +4,7 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
+import ParticlesComponent from "@/components/particle";
 
 export default function ProfilePage() {
     const [accountName, setAccountName] = useState("siwasitLnwza");
@@ -21,7 +22,9 @@ export default function ProfilePage() {
 
     return (
         <div className="relative min-h-screen flex flex-col" style={{ backgroundImage: 'url(/images/plain.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-            <Navbar activePage="Profile" />
+            <div className='z-[0]'><ParticlesComponent /></div>
+            <div className="z-1"><Navbar activePage="Profile" /></div>
+            
 
             <div className="flex relative justify-center items-center">
                 <div className="absolute top-0 left-0 w-full h-full bg-[#FFCB91] opacity-30"></div>
