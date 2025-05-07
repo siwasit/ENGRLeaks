@@ -3,6 +3,7 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
     const [accountName, setAccountName] = useState("siwasitLnwza");
@@ -15,6 +16,8 @@ export default function ProfilePage() {
         "HTML Intermediate",
         "HTML Advanced",
     ]);
+
+    const router = useRouter();
 
     return (
         <div className="relative min-h-screen flex flex-col" style={{ backgroundImage: 'url(/images/plain.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
@@ -67,7 +70,7 @@ export default function ProfilePage() {
                         </div>
                         <div className="flex space-x-4 jusify-start w-full">
                             <button type="submit" className="px-4 py-2 cursor-pointer bg-green-500 text-white rounded-md shadow hover:bg-green-600">Save Changes</button>
-                            <button type="button" className="px-4 py-2 cursor-pointer bg-gray-500 text-white rounded-md shadow hover:bg-gray-600">Dashboard</button>
+                            <button onClick={() => router.push('/dashboard')} type="button" className="px-4 py-2 cursor-pointer bg-gray-500 text-white rounded-md shadow hover:bg-gray-600">Dashboard</button>
                         </div>
                     </form>
                 </div>
