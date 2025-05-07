@@ -13,8 +13,8 @@ const Footer = () => {
                     <Image
                         src="/images/logo.png"
                         alt="Logo"
-                        width={283} // Adjust width as needed
-                        height={80} // Adjust height as needed
+                        width={283} 
+                        height={80} 
                     />
                 </div>
                 <p className="text-sm mb-2">Designed and Developed by</p>

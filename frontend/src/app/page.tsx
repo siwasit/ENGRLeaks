@@ -5,6 +5,7 @@ import Authenticate from "./authenticate/page";
 import Home from "./home/page";
 export default function index() {
 
+
   // This is a simple React component that fetches data from an API and displays it.
   // It uses the useEffect hook to perform the fetch operation when the component mounts.
   // The useState hook is used to manage the state of the fetched data.
