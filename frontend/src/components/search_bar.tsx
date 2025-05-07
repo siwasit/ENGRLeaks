@@ -2,13 +2,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-
 interface SearchBarProps {
     placeholder?: string;
-    onSearch?: (query: string) => void; // Optional search handler
+    onSearch?: (query: string) => void;
 }
 
-// Simplified cn function
 const cn = (...classes: string[]) => classes.filter(Boolean).join(' ');
 
 const SearchBar: React.FC<SearchBarProps> = ({ placeholder = 'Search...', onSearch }) => {
@@ -19,46 +17,43 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder = 'Search...', onSear
     };
 
     const handleSearchClick = () => {
-        if (onSearch) {
-            onSearch(query);
-        }
-        // You could also trigger navigation here if needed
+        if (onSearch) onSearch(query);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            handleSearchClick();
-        }
+        if (event.key === 'Enter') handleSearchClick();
     };
 
     return (
-        <div className="flex items-center w-[25%] shadow-lg">
+        <div className="flex items-center w-[25%] shadow-lg h-14">
             <input
-            type="text"
-            placeholder={placeholder}
-            value={query}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            className={cn(
-            "flex-1 rounded-l-lg",
-            "placeholder-gray-400",
-            "text-sm",
-            "h-12",
-            "px-4",
-            "bg-white",
-            "focus:outline-none" // Disable the red border when focused
-            )}
+                type="text"
+                placeholder={placeholder}
+                value={query}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                className={cn(
+                    "flex-1 rounded-l-lg",
+                    "placeholder:text-3xl placeholder:text-[#85151570]", // increased font size
+                    "text-3xl text-[#851515]", // set font size to 2 rem
+                    "h-full px-4 py-0", // tighter height and minimal vertical padding
+                    "bg-white",
+                    "focus:outline-none",
+                )}
             />
+
             <button
-            onClick={handleSearchClick}
-            className={cn(
-            "bg-[#851515] text-white rounded-r-lg h-12",
-            "hover:bg-red-800",
-            "px-4",
-            "flex items-center"
-            )}
+                onClick={handleSearchClick}
+                className={cn(
+                    "bg-[#851515] text-white rounded-r-lg h-full",
+                    "hover:bg-red-800 cursor-pointer",
+                    "px-5",
+                    "flex items-center justify-center",
+                    "text-lg" // increased font size
+                )}
             >
-               <FontAwesomeIcon icon={faSearch} /></button>
+                <FontAwesomeIcon icon={faSearch} size="lg" />
+            </button>
         </div>
     );
 };

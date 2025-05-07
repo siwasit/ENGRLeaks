@@ -11,7 +11,7 @@ import Navbar from '@/components/navbar';
 import QuizWrapper from '@/components/landing_page_quiz';
 import CourseCard from '@/components/course_card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDownWideShort, faArrowUpWideShort } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from '@/components/search_bar';
 import { ToggleButton } from '@/components/toggle_button';
 
@@ -57,26 +57,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 const Home = () => {
     const [query, setQuery] = useState('');
     const [sortBy, setSortBy] = useState<'title' | 'lecturer' | null>(null);
-    const [activeToggle, setActiveToggle] = useState<'title' | 'lecturer' | null>(null);
 
-    const handleCheckedChangeButton1 = (checked: boolean) => {
-        if (checked) {
-            setActiveToggle('title');
-            setSortBy('title');
-        } else {
-            setActiveToggle(null);
-            setSortBy(null);
-        }
-    };
+    const [active, setActive] = useState('');
 
-    const handleCheckedChangeButton2 = (checked: boolean) => {
-        if (checked) {
-            setActiveToggle('lecturer');
-            setSortBy('lecturer');
-        } else {
-            setActiveToggle(null);
-            setSortBy(null);
-        }
+    const toggleSwitchButton = () => {
+        setActive((prev) => (prev === 'Title' ? 'Lecturer' : 'Title'));
     };
 
     const courses = [
@@ -224,23 +209,67 @@ const Home = () => {
 
                 <div className="flex flex-row items-center justify-center w-full h-full mt-0 space-x-4">
                     <SearchBar onSearch={setQuery} />
-                    <ToggleButton
-                        width="w-35"
-                        label="Title"
-                        icon={<FontAwesomeIcon icon={faArrowDownWideShort} />}
-                        checked={activeToggle === 'title'}
-                        onCheckedChange={handleCheckedChangeButton1}
-                    />
-
-                    <ToggleButton
-                        width="w-50"
-                        label="Lecturer"
-                        icon={<FontAwesomeIcon icon={faArrowDownWideShort} />}
-                        checked={activeToggle === 'lecturer'}
-                        onCheckedChange={handleCheckedChangeButton2}
-                    />
-
                     
+                    <div
+                        className="space-x-4"
+                    >
+                        <button
+                            className={`shadow-lg relative py-2 px-4 w-35 rounded-lg inline-block`}
+                            style={{
+                                color: active === 'Title'
+                                    ? 'white'
+                                    : '#851515',
+                                background: active === 'Title'
+                                    ? '#851515'
+                                    : 'white',
+                            }}
+                            onClick={() => {
+                                if ( active === 'Lecturer' || active === '') {
+                                    toggleSwitchButton();
+                                    setActive('Title');
+                                    setSortBy('title');
+                                } else if (active === 'Title') {
+                                    setActive('');
+                                    setSortBy(null);
+                                }
+                            }}
+                        >
+                            <span className="text-3xl place-items-center space-x-2">
+                                <FontAwesomeIcon icon={faArrowDownWideShort} />
+                                <span>Title</span>
+                            </span>
+                        </button>
+                        <button
+                            className={`shadow-lg py-2 px-4 w-50 rounded-lg`}
+                            style={{
+                                color: active === 'Lecturer'
+                                    ? 'white'
+                                    : '#851515',
+                                background: active === 'Lecturer'
+                                    ? '#851515'
+                                    : 'white',
+                            }}
+                            onClick={() => {
+                                if (active === 'Title' || active === '') {
+                                    toggleSwitchButton();
+                                    setActive('Lecturer');
+                                    setSortBy('lecturer');
+                                } else if (active === 'Lecturer') {
+                                    setActive('');
+                                    setSortBy(null);
+                                }
+                            }}
+                        >
+                            <span className="text-3xl place-items-center space-x-2">
+                                <FontAwesomeIcon icon={faArrowDownWideShort} />
+                                <span>Lecturer</span>
+                            </span>
+                           
+                        </button>
+                        
+
+                    </div>
+
                 </div>
 
                 <div className="grid grid-cols-1 gap-16 mt-14 place-items-center">
