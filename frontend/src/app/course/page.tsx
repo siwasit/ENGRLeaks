@@ -9,10 +9,22 @@ import MultipleChoiceExercise from "@/templates/multipleChoiceExercise";
 import Paragraph from "@/templates/paragraph";
 import RunTimeIDE from "@/templates/runtimeIDE";
 import RunTimeExercise from "@/templates/runtimeIDETest";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import lesson1 from "./Lesson1";
 
 export default function CoursePage() {
     const [isOpen, setIsOpen] = useState(false);
+    const lessonData = lesson1;
+    // const jsonLesson = () => {
+    //     const lessonData = lesson1; // Assuming lesson1 is the imported JSON data
+    //     lessonData.forEach((detail) => {
+    //         console.log(detail);
+    //     });
+    // }
+
+    // useEffect(() => {
+    //     jsonLesson();
+    // }, []);
 
     return (
         <div className="relative min-h-screen flex flex-col" style={{ background: 'linear-gradient(to bottom right, #FFCB91, #FE7474)' }}>
@@ -108,7 +120,18 @@ export default function CoursePage() {
                                 {/* <span className="absolute bottom-3 left-[15] w-4/5 h-[3px] bg-white"></span> */}
                             </div>
 
-                            <CourseHeader title="HTML Introduction" teacher_name="Siwasit Saengnikun" />
+                            {lessonData.map((detail, index) => (
+                                <div key={index}>
+                                    {detail.type === "CourseHeader" && <CourseHeader title={detail.content} teacher_name={detail.initialTeacherName ?? ""} />}
+                                    {detail.type === "Paragraph" && <Paragraph title={detail.initialTitle ?? ""} text={detail.content} />}
+                                    {detail.type === "IDERuntimeTutorial" && <RunTimeIDE initialCode={detail.content} title="Tutorial" />}
+                                    {detail.type === "IDERuntimeExercise" && <RunTimeExercise initialCode={detail.content} title="Exercise" instructions="Write an HTML heading that says 'Welcome to the IDE!' using an <h1> tag." expectedOutput="<h1>Welcome to the IDE!</h1>" />}
+                                    {detail.type === "Image" && <CourseImage imageUrl={detail.src ?? ""} imageDescription={detail.content} />}
+                                    {detail.type === "ExerciseChoice" && <MultipleChoiceExercise text={detail.content} options={["<link>", "<a>", "<href>", "<url>"]} correctIndex={1} />}
+                                </div>
+                            ))}
+
+                            {/* <CourseHeader title="HTML Introduction" teacher_name="Siwasit Saengnikun" />
                             <Paragraph
                                 title="What is HTML?"
                                 text="HTML (Hypertext Markup Language) is the standard markup language for documents designed to be displayed in a web browser. It can be assisted by technologies such as Cascading Style Sheets (CSS) and scripting languages such as JavaScript. 
@@ -145,7 +168,8 @@ export default function CoursePage() {
                                 text="Which tag is used to create a hyperlink in HTML?"
                                 options={["<link>", "<a>", "<href>", "<url>"]}
                                 correctIndex={1}
-                            />
+                            /> */}
+
                         </div>
                         <div className="flex px-16 justify-between items-center w-full">
                             <div className="flex justify-center items-center mt-8 mb-4">

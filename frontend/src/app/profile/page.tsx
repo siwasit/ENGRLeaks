@@ -18,19 +18,19 @@ export default function ProfilePage() {
 
     const router = useRouter();
 
-    const getCsrfToken = async () => {
-        try {
-            const response = await axios.get('http://localhost:8000/api/get_csrf/', {
-                withCredentials: true,  // Include cookies in request
-            });
+    // const getCsrfToken = async () => {
+    //     try {
+    //         const response = await axios.get('http://localhost:8000/api/get_csrf/', {
+    //             withCredentials: true,  // Include cookies in request
+    //         });
 
-            document.cookie = `csrftoken=${response.data.csrfToken}; path=/;`;
-            return response
-        } catch (error) {
-            console.error('Error fetching CSRF token:', error);
-            return null;
-        }
-    };
+    //         document.cookie = `csrftoken=${response.data.csrfToken}; path=/;`;
+    //         return response
+    //     } catch (error) {
+    //         console.error('Error fetching CSRF token:', error);
+    //         return null;
+    //     }
+    // };
 
     function getUserIdFromToken() {
         const access_token = localStorage.getItem('access_token');
@@ -56,7 +56,7 @@ export default function ProfilePage() {
         }
     }
 
-    const retreiveProfile = async () => {
+    const retrieveProfile = async () => {
         const userId = getUserIdFromToken();
         if (userId) {
             try {
@@ -77,7 +77,7 @@ export default function ProfilePage() {
         }
     };
 
-    const retreiveCourses = async () => {
+    const retrieveCourses = async () => {
         const userId = getUserIdFromToken();
         if (userId) {
             try {
@@ -97,6 +97,7 @@ export default function ProfilePage() {
     const handleChangeSubmit = async () => {
         const userId = getUserIdFromToken();
         const csrfToken = getCsrfTokenFromCookies(); // Fetch CSRF token
+        console.log('CSRF Token:', csrfToken); // Log the CSRF token for debugging
 
         if (!csrfToken) {
             alert('CSRF token not found. Please refresh the page.');
@@ -131,9 +132,9 @@ export default function ProfilePage() {
     };
 
     useEffect(() => {
-        retreiveProfile();
-        retreiveCourses();
-        getCsrfToken();
+        retrieveProfile();
+        retrieveCourses();
+        // getCsrfToken();
     }, []);
 
     return (
@@ -168,7 +169,13 @@ export default function ProfilePage() {
                         </div>
                         <div className="w-full">
                             <label htmlFor="role" className="block text-[24px] font-bold text-[#851515]">Role</label>
-                            <select id="role" name="role" className="p-2 block w-1/2 focus:outline-none border-b-3" defaultValue={role} onChange={(e) => setRole(e.target.value)}>
+                            <select
+                                id="role"
+                                name="role"
+                                className="p-2 block w-1/2 focus:outline-none border-b-3"
+                                value={role} // Use value instead of defaultValue
+                                onChange={(e) => setRole(e.target.value)}
+                            >
                                 <option value="student">Student</option>
                                 <option value="teacher">Teacher</option>
                             </select>
@@ -187,7 +194,7 @@ export default function ProfilePage() {
                             ))}
                         </div>
                         <div className="flex space-x-4 jusify-start w-full">
-                            <button type="submit" className="px-4 py-2 cursor-pointer bg-green-500 text-white rounded-md shadow hover:bg-green-600">Save Changes</button>
+                            <button type="submit" className="px-4 py-2 cursor-pointer bg-[#28A745] text-white rounded-md shadow hover:bg-green-600">Save Changes</button>
                             <button onClick={() => router.push('/dashboard')} type="button" className="px-4 py-2 cursor-pointer bg-gray-500 text-white rounded-md shadow hover:bg-gray-600">Dashboard</button>
                         </div>
                     </form>

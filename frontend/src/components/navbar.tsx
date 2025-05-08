@@ -55,12 +55,35 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
         router.push('/authenticate');  // Replace with your authentication page route
     };
 
+    const getCsrfToken = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/get_csrf/', {
+                withCredentials: true,  // Include cookies in request
+            });
+
+            document.cookie = `csrftoken=${response.data.csrfToken}; path=/;`;
+            return response
+        } catch (error) {
+            console.error('Error fetching CSRF token:', error);
+            return null;
+        }
+    };
+
+    const checkAccessToken = () => {
+        const accessToken = localStorage.getItem('access_token');
+
+        if (!accessToken) {
+            // Redirect to home page if no access token
+            window.location.href = '/';
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         setIsLogin(false);
         // router.push('/');  // Redirect to login page
-        // Redirect user to login page
+        window.location.href = '/';
     };
 
     useEffect(() => {
@@ -70,6 +93,10 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
             setIsLogin(true);
         } else {
             console.log('No token found');
+        }
+        if (!localStorage.getItem('csrf_token_initialized')) {
+            getCsrfToken();
+            localStorage.setItem('csrf_token_initialized', 'true');
         }
     }, []);  // Empty dependency array ensures it runs only on client-side mount
 

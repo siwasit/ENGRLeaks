@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from ENGRBackend.models import Course, Lesson
 from django.core.serializers import serialize
+from django.db.models import F
 
 def get_all_courses(request):
     courses = Course.objects.all()
@@ -12,14 +13,20 @@ def get_all_courses(request):
             'id': course.id,
             'creator': course.creator.account_name,
             'course_name': course.course_name,
+            # 'course_id': course.course_id,
+            'course_description': course.description,
             'total_lessons': course.total_lessons,
+            'total_exercises': course.total_exercises,
+            'status': course.status,
             'created_at': course.created_at.isoformat(),
         }
         courses_data.append(course_data)
     return JsonResponse(courses_data, safe=False, json_dumps_params={'ensure_ascii': False})
 
 def get_course_byid(request, course_id):
-    course = Course.objects.filter(id=course_id).values('id', 'creator', 'course_name', 'total_lessons', 'created_at').first()
+    course = Course.objects.filter(id=course_id).annotate(
+        creator_name=F('creator__account_name')
+    ).values('id', 'creator_name', 'course_name', 'description', 'total_lessons', 'total_exercises', 'status', 'created_at').first()
     if course:
         return JsonResponse(course, status=200)
     else:
@@ -94,3 +101,52 @@ def get_all_lessons_by_course(request, course_id):
     
     # Return a JsonResponse with the lesson data
     return JsonResponse({'lessons': lessons_data}, status=200)
+
+def add_course(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        course_name = data.get('course_name')
+        description = data.get('description')
+        total_lessons = data.get('total_lessons')
+        creator_id = data.get('creator_id')
+
+        # Create a new course instance
+        new_course = Course(
+            course_name=course_name,
+            description=description,
+            total_lessons=total_lessons,
+            creator_id=creator_id
+        )
+        new_course.save()
+
+        return JsonResponse({'message': 'Course created successfully'}, status=201)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def delete_course(request, course_id):
+    try:
+        course = Course.objects.get(id=course_id)
+        course.delete()
+        return JsonResponse({'message': 'Course deleted successfully'}, status=200)
+    except Course.DoesNotExist:
+        return JsonResponse({'error': 'Course not found'}, status=404)
+
+def update_course(request, course_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        course_name = data.get('course_name')
+        description = data.get('description')
+        total_lessons = data.get('total_lessons')
+
+        try:
+            course = Course.objects.get(id=course_id)
+            course.course_name = course_name
+            course.description = description
+            course.total_lessons = total_lessons
+            course.save()
+
+            return JsonResponse({'message': 'Course updated successfully'}, status=200)
+        except Course.DoesNotExist:
+            return JsonResponse({'error': 'Course not found'}, status=404)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

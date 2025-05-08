@@ -5,7 +5,7 @@ from django.core.serializers import serialize
 
 def get_all_enrollments(request):
     # Fetch all enrollments and return as a list of dictionaries
-    enrollments = Enrollment.objects.values('user__account_name', 'course__course_name', 'learned_lesson')
+    enrollments = Enrollment.objects.values('user__account_name', 'course__course_name', 'learned_lesson', 'course__id', 'user__id')
     
     # Return a JsonResponse with the enrollment data
     return JsonResponse({'enrollments': list(enrollments)}, status=200)
@@ -22,6 +22,9 @@ def get_enrollments_by_user(request, user_id):
                 'user': enrollment.user.account_name,
                 'course': enrollment.course.course_name,
                 'learned_lesson': enrollment.learned_lesson,
+                'course_id': enrollment.course.id,
+                'user_id': enrollment.user.id,
+                'created_at': enrollment.created_at
             })
         
         # Return a JsonResponse with the serialized data

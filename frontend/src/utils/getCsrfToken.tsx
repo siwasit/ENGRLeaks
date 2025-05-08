@@ -3,11 +3,12 @@ export const getCsrfTokenFromCookies = () => {
     const cookies = document.cookie.split(';');
 
     for (let cookie of cookies) {
-        const trimmedCookie = cookie.trim();
-        if (trimmedCookie.startsWith(cookieName)) {
-            return cookie.substring(cookieName.length, cookie.length);
+        while (cookie.startsWith(' ')) {
+            cookie = cookie.substring(1);
+        }
+        if (cookie.startsWith(cookieName)) {
+            return cookie.substring(cookieName.length);
         }
     }
     return null;
 };
-

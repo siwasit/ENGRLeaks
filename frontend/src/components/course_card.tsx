@@ -49,6 +49,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
                 'text-white w-full max-w-6xl', // Increased max width
                 'bg-white',
                 'overflow-hidden',
+                'h-full'
             )}
 
             style={{
@@ -56,23 +57,22 @@ const CourseCard: React.FC<CourseCardProps> = ({
             }}
         >
             {/* Left Section (Course Title) */}
-            <div className='flex'>
-                <div className="w-[400px] h-[340px] flex items-center justify-center bg-gradient-to-r from-[#f2a074] to-[#f05f5e]">
+            <div className='flex h-full'>
+                <div className="w-[400px] h-full flex items-center justify-center bg-gradient-to-r from-[#f2a074] to-[#f05f5e]">
                     <h1
                         className={cn(
-                            'text-8xl font-bold', // Increased font size
-                            'text-white',
-                            'break-words',
+                            'text-5xl font-bold text-white text-center break-words'
                         )}
                     >
                         {title}
                     </h1>
                 </div>
+
             </div>
 
 
             {/* Right Section (Course Details) */}
-            <div className="space-y-6 mt-6 ml-6 mr-6"> {/* Increased spacing */}
+            <div className="space-y-6 m-4 items-center justify-center"> {/* Increased spacing */}
                 <div className="flex items-center gap-4">
                     <div className='text-[#851515] font-bold text-5xl'>
                         {title}

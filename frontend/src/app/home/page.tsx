@@ -40,9 +40,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <div className="relative flex flex-col min-h-screen">
                 <div className='z-3'><Navbar activePage='' /></div>
                 
-                <main className="flex-1 relative z-2"> {children}</main>
-                <div className='z-[1]'><ParticlesComponent /></div>
-                <div className='relative z-[-1]'><Footer /></div>
+                <main className="flex-1 relative z-5"> {children}</main>
+                <div className='z-[2]'><ParticlesComponent /></div>
+                <div className='relative z-[1]'><Footer /></div>
             </div>
         </div>
     );

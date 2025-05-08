@@ -29,6 +29,7 @@ urlpatterns = [
     path('users/', user_views.get_all_users, name='get_all_users'),
     path('enrollments/<int:user_id>/', enrollment_view.get_enrollments_by_user, name='get_enrollments_by_user'),
     path('users/<int:user_id>/', user_views.get_user_byid, name='get_user_byid'),
+    path('delete_user/<int:user_id>/', user_views.delete_user, name='delete_user'),
     path('courses/', course_views.get_all_courses, name='get_all_courses'),
     path('courses/<int:course_id>/', course_views.get_course_byid, name='get_course_byid'),
     path('lessons/<int:lesson_id>/', course_views.get_lesson_byid, name='get_lesson_byid'),
@@ -41,4 +42,8 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', user_views.RegisterView.as_view(), name='register'),
     path('api/update_user/<int:user_id>/', user_views.update_user, name='update_user'),
+
+    path('add_course/', course_views.add_course, name='add_course'),
+    path('delete_course/<int:course_id>/', course_views.delete_course, name='delete_course'),
+    path('update_course/<int:course_id>/', course_views.update_course, name='update_course'),
 ]

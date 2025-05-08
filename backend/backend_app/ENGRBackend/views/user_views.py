@@ -69,3 +69,14 @@ def update_user(request, user_id):
             return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+    
+def delete_user(request, user_id):
+    if request.method == 'DELETE':
+        try:
+            user = User.objects.get(id=user_id)
+            user.delete()
+            return JsonResponse({'message': 'User deleted successfully'}, status=200)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
