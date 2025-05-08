@@ -23,6 +23,8 @@ from ENGRBackend.views import user_views, course_views, enrollment_view
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    path('api/get_csrf/', user_views.get_csrf_token, name='get_csrf_token'),
+
     path('lessons/', course_views.get_all_lessons, name='get_all_lessons'),
     path('users/', user_views.get_all_users, name='get_all_users'),
     path('enrollments/<int:user_id>/', enrollment_view.get_enrollments_by_user, name='get_enrollments_by_user'),
@@ -38,4 +40,5 @@ urlpatterns = [
         # If your /api/token/ endpoint is using JWT or similar stateless authentication, you can safely bypass CSRF for that specific endpoint. Let me know if you need more details on this!
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', user_views.RegisterView.as_view(), name='register'),
+    path('api/update_user/<int:user_id>/', user_views.update_user, name='update_user'),
 ]

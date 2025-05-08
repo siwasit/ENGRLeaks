@@ -25,19 +25,19 @@ const CourseCard: React.FC<CourseCardProps> = ({
 
     switch (status) {
         case 'Resume':
-            statusColor = 'bg-[#FFB915] text-white';
+            statusColor = 'bg-[#FFB915] text-[24px] text-white';
             break;
         case 'Enroll now!':
-            statusColor = 'bg-[#28A745] text-white';
+            statusColor = 'bg-[#28A745] text-[24px] text-white';
             break;
         case 'Finished':
-            statusColor = 'bg-orange-400 text-white';
+            statusColor = 'bg-orange-400 text-[24px] text-white';
             break;
         case 'Unenroll':
-            statusColor = 'bg-red-500 text-white';
+            statusColor = 'bg-red-500 text-[24px] text-white';
             break;
         default:
-            statusColor = 'bg-pink-400 text-white';
+            statusColor = 'bg-pink-400 text-[24px] text-white';
             break;
     }
 
@@ -74,20 +74,20 @@ const CourseCard: React.FC<CourseCardProps> = ({
             {/* Right Section (Course Details) */}
             <div className="space-y-6 mt-6 ml-6 mr-6"> {/* Increased spacing */}
                 <div className="flex items-center gap-4">
-                <div className='text-[#851515] font-bold text-2xl'>
+                    <div className='text-[#851515] font-bold text-5xl'>
                         {title}
                     </div>
                     <span
                         className={cn(
                             'bg-gradient-to-r from-[#f2a074] to-[#f05f5e]',
-                            'px-4 py-1 rounded-md', // Increased padding
+                            'px-4 py-2 font-medium rounded-md', // Increased padding
                             'text-sm', // Increased text size
                             'md-0'
                         )}
                     >
                         {lecturer}
                     </span>
-                    
+
                 </div>
                 <div className="h-[2px] bg-gradient-to-r from-[#f2a074] to-[#f05f5e] mt-0"></div>
                 <p className="text-base text-[#851515] leading-relaxed mt-0"> {/* Increased text size */}

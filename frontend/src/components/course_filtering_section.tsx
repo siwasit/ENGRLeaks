@@ -12,7 +12,7 @@ const courses = [
     {
         title: "HTML",
         lecturer: "Akkrawoot Takhom",
-        description: "Lorem ipsum dolor sit amet...",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget laoreet neque. Integer vel magna id mi fermentum finibus. Ut at ipsum egestas nisi pharetra mollis nec vel orci.",
         totalLessons: 20,
         totalExercises: 40,
         status: "Resume",
@@ -20,7 +20,7 @@ const courses = [
     {
         title: "CSS",
         lecturer: "Worayot Liamkaew",
-        description: "Lorem ipsum dolor sit amet...",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget laoreet neque. Integer vel magna id mi fermentum finibus. Ut at ipsum egestas nisi pharetra mollis nec vel orci.",
         totalLessons: 20,
         totalExercises: 40,
         status: "Enroll now!",
@@ -28,18 +28,10 @@ const courses = [
     {
         title: "JS",
         lecturer: "Siwasit Saengnikun",
-        description: "Lorem ipsum dolor sit amet...",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget laoreet neque. Integer vel magna id mi fermentum finibus. Ut at ipsum egestas nisi pharetra mollis nec vel orci.",
         totalLessons: 20,
         totalExercises: 40,
         status: "Finished",
-    },
-    {
-        title: "JS",
-        lecturer: "Siwasit Saengnikun",
-        description: "Lorem ipsum dolor sit amet...",
-        totalLessons: 20,
-        totalExercises: 40,
-        status: "Unenroll",
     },
 ];
 

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$v+8rgox7hb4=utadhff5p(*19ti#ymo71eh$shy8scw6!#rr%'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 AUTH_USER_MODEL = 'ENGRBackend.User'
 
@@ -53,24 +54,38 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000', 'http://192.168.75.1:3000', ' https://8ee7-2405-9800-ba00-ca0-1daf-7bfd-c48f-d258.ngrok-free.app'
 ]
+CORS_ALLOW_ALL_ORIGINS = False
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000', 'http://192.168.75.1:3000'  # Your Next.js frontend URL
+]
+
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = False
 
 CORS_ALLOW_CREDENTIALS = True
+
+# Allow specific headers, including CSRF token
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'X-CSRFToken',    # Explicitly allow CSRF token header
+    'authorization',
+    'accept',
+    'origin',
+    'x-requested-with',
+]
 
 CORS_ALLOW_METHODS = [
     'GET',
     'POST',
     'PUT',
     'DELETE',
-]
-
-CORS_ALLOW_HEADERS = [
-    'content-type',
-    'authorization',
 ]
 
 REST_FRAMEWORK = {
