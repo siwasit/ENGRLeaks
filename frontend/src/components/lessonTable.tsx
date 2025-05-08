@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function CourseTable() {
@@ -9,6 +10,8 @@ export default function CourseTable() {
     const handleAddCourse = (e: React.FormEvent) => {
         e.preventDefault();
     }
+
+    const router = useRouter();
 
     return (
         <div className="flex flex-col my-4">
@@ -27,7 +30,10 @@ export default function CourseTable() {
                     style={{
                         background: 'linear-gradient(to bottom right, #FE7474, #FFCB91)',
                     }}
-                    onClick={() => setShowModalLesson(true)}
+                    // onClick={() => setShowModalLesson(true)}
+                    onClick={() => {
+                        router.push("/addlesson");
+                    }}
                 >
                     <div className="absolute top-0 left-0 w-full h-full bg-[#C5211C] opacity-25 rounded-lg"></div>
                     <span className="relative z-10 font-medium">Add lesson</span>
