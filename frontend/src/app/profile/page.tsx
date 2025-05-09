@@ -7,30 +7,7 @@ import { useRouter } from 'next/navigation';
 import ParticlesComponent from "@/components/particle";
 import axios from "axios";
 import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
-
-export function getUserIdFromToken() {
-    const access_token = localStorage.getItem('access_token');
-    if (!access_token) {
-        console.error('No access token found');
-        return null;
-    }
-
-    try {
-        const base64Url = access_token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(
-            atob(base64)
-                .split('')
-                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                .join('')
-        );
-        const decodedUserID = JSON.parse(jsonPayload);
-        return decodedUserID.user_id;
-    } catch (error) {
-        console.error('Failed to decode token:', error);
-        return null;
-    }
-}
+import { getUserIdFromToken } from "@/utils/getUserIdFromToken";
 
 export default function ProfilePage() {
     const [accountName, setAccountName] = useState("");
@@ -41,20 +18,6 @@ export default function ProfilePage() {
     const [enrolledCourses, setEnrolledCourses] = useState([]);
 
     const router = useRouter();
-
-    // const getCsrfToken = async () => {
-    //     try {
-    //         const response = await axios.get('http://localhost:8000/api/get_csrf/', {
-    //             withCredentials: true,  // Include cookies in request
-    //         });
-
-    //         document.cookie = `csrftoken=${response.data.csrfToken}; path=/;`;
-    //         return response
-    //     } catch (error) {
-    //         console.error('Error fetching CSRF token:', error);
-    //         return null;
-    //     }
-    // };
 
     const retrieveProfile = async () => {
         const userId = getUserIdFromToken();

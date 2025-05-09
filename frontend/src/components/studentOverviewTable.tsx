@@ -3,10 +3,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 export default function StudentOverviewTable() {
-
-    const [showModalCourse, setShowModalCourse] = useState(false);
-    const [courseTitle, setCourseTitle] = useState("");
-    const [description, setDescription] = useState("");
     interface Student {
         id: number;
         name: string;
@@ -68,7 +64,7 @@ export default function StudentOverviewTable() {
 
     useEffect(() => {
         retrieveStudentOverview();
-    }, []);
+    }, [retrieveStudentOverview]);
 
 
     return (

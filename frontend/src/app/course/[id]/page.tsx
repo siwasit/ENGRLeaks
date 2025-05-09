@@ -15,19 +15,18 @@ import { useParams } from "next/navigation";
 
 interface Lesson {
     body: string;
-    [key: string]: any; // Add specific fields as needed
+    [key: string]: any;
 }
 
 export default function CoursePage() {
-    const [isOpen, setIsOpen] = useState(false);
+    // const [isOpen, setIsOpen] = useState(false);
     const params = useParams();
     const course_id = params?.id as string;
 
     const [lessonsData, setLessonsData] = useState<Lesson[]>([]);
-    const [lessonId, setLessonId] = useState("");
     const [courseName, setCourseName] = useState("");
     const [lessonIndex, setLessonIndex] = useState<number>(0);
-    
+
     const retrieveAllLesson = async () => {
         try {
             const lessonsRes = await axios.get(`http://localhost:8000/lessons/course/${course_id}`);
@@ -38,7 +37,7 @@ export default function CoursePage() {
                         body: JSON.parse(lesson.body)
                     };
                 });
-                setLessonId(lessonsData[0].id)
+                // setLessonId(lessonsData[0].id)
                 setLessonsData(lessonsData)
             }
         } catch (error) {
@@ -60,7 +59,7 @@ export default function CoursePage() {
     useEffect(() => {
         retrieveAllLesson();
         retrieveCourseName();
-    }, [])
+    }, [course_id, retrieveAllLesson, retrieveCourseName])
 
     if (!course_id || course_id === '0') {
         return (<><p>ID not found</p></>);
@@ -116,15 +115,16 @@ export default function CoursePage() {
                                 )}
                             </span> */}
                         </div>
-                        {isOpen && (
-                            <div className={`absolute left-0 right-0 top-13 bg-[#FAD4D4] text-[#851515] border-t-3 border-[#851515] p-4 mt-2 shadow-lg ${isOpen ? 'z-10' : 'z-0'}`}>
-                                <ul className="space-y-2">
-                                    <li className="text-[#851515] opacity-70 hover:opacity-100 cursor-pointer">HTML Beginer by siwasit</li>
-                                    <li className="text-[#851515] opacity-70 hover:opacity-100 cursor-pointer">HTML Basic by siwasit</li>
-                                    <li className="text-[#851515] opacity-70 hover:opacity-100 cursor-pointer">HTML Advance by siwasit</li>
-                                </ul>
-                            </div>
-                        )}
+                        {/* {isOpen &&
+                            (
+                                <div className={`absolute left-0 right-0 top-13 bg-[#FAD4D4] text-[#851515] border-t-3 border-[#851515] p-4 mt-2 shadow-lg ${isOpen ? 'z-10' : 'z-0'}`}>
+                                    <ul className="space-y-2">
+                                        <li className="text-[#851515] opacity-70 hover:opacity-100 cursor-pointer">HTML Beginer by siwasit</li>
+                                        <li className="text-[#851515] opacity-70 hover:opacity-100 cursor-pointer">HTML Basic by siwasit</li>
+                                        <li className="text-[#851515] opacity-70 hover:opacity-100 cursor-pointer">HTML Advance by siwasit</li>
+                                    </ul>
+                                </div>
+                            )} */}
                         <div className="z-5">
                             <ul className="">
                                 {lessonsData.map((lesson, index) => (
@@ -135,7 +135,7 @@ export default function CoursePage() {
                             </ul>
                         </div>
 
-                        
+
                         {/* <div className="flex flex-col justify-center items-center mt-16 sticky top-1/2 transform -translate-y-1/2 gap-2">
                             <div className="relative w-4/5 h-8 bg-white rounded-lg overflow-hidden border-2 border-solid border-[#28A745]">
                                 <div
@@ -158,7 +158,7 @@ export default function CoursePage() {
 
                             {lessonsData.map((lesson, index) => (
                                 <div key={index}>
-                                    
+
                                     {/* {item.type === "CourseHeader" && <CourseHeader title={detail.content} teacher_name={detail.initialTeacherName ?? ""} />}
                                     {detail.type === "Paragraph" && <Paragraph title={detail.initialTitle ?? ""} text={detail.content} />}
                                     {detail.type === "IDERuntimeTutorial" && <RunTimeIDE initialCode={detail.content} title="Tutorial" />}
@@ -166,27 +166,27 @@ export default function CoursePage() {
                                     {detail.type === "Image" && <CourseImage imageUrl={detail.src ?? ""} imageDescription={detail.content} />}
                                     {detail.type === "ExerciseChoice" && <MultipleChoiceExercise text={detail.content} options={["<link>", "<a>", "<href>", "<url>"]} correctIndex={1} />} */}
                                 </div>
-                            ))}    
+                            ))}
 
-                        {/* <LessonRenderer content={lessonsData[lessonIndex].body}/> */}
-                        <div>
-                            {Array.isArray(lessonsData[lessonIndex]?.body) ? (
-                                lessonsData[lessonIndex]?.body.map((item: any, idx: number) => (
-                                    <div key={idx}>
-                                        {/* Render item properties here */}
-                                        {item.type === "Paragraph" && <Paragraph title={item.title} text={item.content} />}
-                                        {item.type === "CourseHeader" && <CourseHeader title={item.title} teacher_name={item.lecturer} />}
-                                        {item.type === "IDERuntimeTutorial" && <RunTimeIDE initialCode={item.content} title="Tutorial" />}
-                                        {item.type === "IDERuntimeExercise" && <RunTimeExercise initialCode={item.content} title="Exercise" instructions="Write an HTML heading that says 'Welcome to the IDE!' using an <h1> tag." expectedOutput="<h1>Welcome to the IDE!</h1>" />}
-                                        {item.type === "Image" && <CourseImage imageUrl={item.src ?? ""} imageDescription={item.content} />}
-                                        {item.type === "ExerciseChoice" && <MultipleChoiceExercise text={item.question} options={item.choices} correctIndex={item.correctChoice - 1} />}
-                                        {/* Add more conditions for other types */}
-                                    </div>
-                                ))
-                            ) : (
-                                <p>{JSON.stringify(lessonsData[lessonIndex]?.body)}</p>
-                            )}
-                        </div>
+                            {/* <LessonRenderer content={lessonsData[lessonIndex].body}/> */}
+                            <div>
+                                {Array.isArray(lessonsData[lessonIndex]?.body) ? (
+                                    lessonsData[lessonIndex]?.body.map((item: any, idx: number) => (
+                                        <div key={idx}>
+                                            {/* Render item properties here */}
+                                            {item.type === "Paragraph" && <Paragraph title={item.title} text={item.content} />}
+                                            {item.type === "CourseHeader" && <CourseHeader title={item.title} teacher_name={item.lecturer} />}
+                                            {item.type === "IDERuntimeTutorial" && <RunTimeIDE initialCode={item.content} title="Tutorial" />}
+                                            {item.type === "IDERuntimeExercise" && <RunTimeExercise initialCode={item.content} title="Exercise" instructions="Write an HTML heading that says 'Welcome to the IDE!' using an <h1> tag." expectedOutput="<h1>Welcome to the IDE!</h1>" />}
+                                            {item.type === "Image" && <CourseImage imageUrl={item.src ?? ""} imageDescription={item.content} />}
+                                            {item.type === "ExerciseChoice" && <MultipleChoiceExercise text={item.question} options={item.choices} correctIndex={item.correctChoice - 1} />}
+                                            {/* Add more conditions for other types */}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>{JSON.stringify(lessonsData[lessonIndex]?.body)}</p>
+                                )}
+                            </div>
 
                         </div>
                         <div className="flex px-16 justify-between items-center w-full">
@@ -199,10 +199,10 @@ export default function CoursePage() {
                                 <a href='#'>Previous Lesson</a>
                             </button>
                             <button className={`flex ${lessonIndex === lessonsData.length - 1 ? '' : 'cursor-pointer hover:bg-[#0056b3]'} justify-center items-center mt-8 mb-4 bg-[#007BFF] text-white font-bold py-2 px-4 rounded transition-colors duration-300`}
-                            onClick={() => {
-                                lessonIndex < lessonsData.length - 1 && setLessonIndex(lessonIndex + 1)
-                            }}
-                            disabled={lessonIndex === lessonsData.length - 1}
+                                onClick={() => {
+                                    lessonIndex < lessonsData.length - 1 && setLessonIndex(lessonIndex + 1)
+                                }}
+                                disabled={lessonIndex === lessonsData.length - 1}
                             >
                                 <a href="#">Next Lesson</a>
                             </button>

@@ -1,14 +1,14 @@
 import AuthenticationSection from '@/components/authentication_section';
 import './style.css';
-import Particle from '@/components/particle';
 import ParticlesComponent from '@/components/particle';
+import Image from 'next/image';
 
 export default function Authenticate() {
     return (
         <><div>
             <div className="container">
                 <div className="nebula-img-container">
-                    <img
+                    <Image
                         src="https://freenaturestock.com/wp-content/uploads/freenaturestock-1719-1024x683.jpg"
                         alt=""
                     />

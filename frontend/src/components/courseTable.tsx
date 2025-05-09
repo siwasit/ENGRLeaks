@@ -82,7 +82,7 @@ export default function CourseTable() {
         )
     }
 
-    const retreiveCourseById = async (courseId: number) => {
+    const retrieveCourseById = async (courseId: number) => {
         try {
             const res = await axios.get(`http://localhost:8000/courses/${courseId}/`)
             if (res.status === 200) {
@@ -113,7 +113,7 @@ export default function CourseTable() {
                 },
                 withCredentials: true,  // Include cookies in the request
             })
-            retreiveCourse();
+            retrieveCourse();
         } catch (error) {
             console.error("Error updating course:", error);
         }
@@ -128,13 +128,13 @@ export default function CourseTable() {
                 },
                 withCredentials: true,  // Include cookies in the request
             })
-            retreiveCourse();
+            retrieveCourse();
         } catch (error) {
             console.error("Error deleting course:", error);
         }
     }
 
-    const retreiveCourse = async () => {
+    const retrieveCourse = async () => {
         const courseCount: Record<string, number> = {};
         try {
             const res = await axios.get("http://localhost:8000/courses/")
@@ -191,9 +191,9 @@ export default function CourseTable() {
     }
 
     useEffect(() => {
-        retreiveCourse()
-        // retreiveCourseSummary()
-    }, [])
+        retrieveCourse()
+        // retrieveCourseSummary()
+    }, [retrieveCourse])
 
     return (
         <div className="flex flex-col my-4">
@@ -345,7 +345,7 @@ export default function CourseTable() {
                                     <td className="border border-gray-300 px-4 py-2 text-center">{course.enrollment_count}</td>
                                     <td className="border border-gray-300 px-4 py-2 text-center">{course.course_completion}</td>
                                     <td className="border flex justify-center space-x-4 border-gray-300 py-2">
-                                        <button onClick={() => { toggleModal(); retreiveCourseById(course.id); }} className="bg-[#FFB915] cursor-pointer text-white w-20 py-1 rounded hover:bg-yellow-400 transition-colors">Edit</button>
+                                        <button onClick={() => { toggleModal(); retrieveCourseById(course.id); }} className="bg-[#FFB915] cursor-pointer text-white w-20 py-1 rounded hover:bg-yellow-400 transition-colors">Edit</button>
                                         <button onClick={() => handleDeleteCourse(course.id)} className="bg-[#C5211C] cursor-pointer text-white w-20 py-1 rounded hover:bg-red-600 transition-colors">Delete</button>
                                     </td>
                                 </tr>
