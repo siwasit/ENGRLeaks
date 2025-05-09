@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Frontend - Next.js
+  frontend:
+    build:
+      context: ./frontend  # path to your Next.js project
+      dockerfile: Dockerfile  # Dockerfile for the frontend
+    ports:
+      - "3000:3000"  # Expose Next.js app on port 3000
+    volumes:
+      - ./frontend:/app  # bind mount to sync code changes during development
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+
+  # Backend - Django
+  backend:
+    build:
+      context: ./backend  # path to your Django project
+      dockerfile: Dockerfile  # Dockerfile for the backend
+    ports:
+      - "8000:8000"  # Expose Django app on port 8000
+    volumes:
+      - ./backend:/app  # bind mount to sync code changes during development
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DJANGO_SECRET_KEY=your_secret_key_here
+      - DJANGO_ALLOWED_HOSTS=engrleaks.onrender.com  # Replace with your Render app URL
+    depends_on:
+      # No need to define the db service anymore
+      - frontend  # Make sure frontend starts first
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

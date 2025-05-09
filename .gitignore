@@ -38,6 +38,6 @@ backend/logs/
 frontend/tmp/
 backend/tmp/
 
-docker-compose.yml
-frontend/Dockerfile
-backend/Dockerfile
+# docker-compose.yml
+# frontend/Dockerfile
+# backend/Dockerfile
