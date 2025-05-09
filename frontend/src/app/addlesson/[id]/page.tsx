@@ -8,30 +8,22 @@ import CourseHeader from '@/templates/courseHeader';
 import Paragraph from '@/templates/paragraph';
 import CourseImageProps from '@/templates/image_component';
 import MultipleChoiceExercise from '@/templates/multipleChoiceExercise';
-import { text } from 'stream/consumers';
 import Footer from '@/components/footer';
-import { divMode } from '@tsparticles/engine';
 import CodeMirror from "@uiw/react-codemirror";
 import { html } from "@codemirror/lang-html";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { TerminalSquare } from 'lucide-react';
-import { useParams, useSearchParams, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
     Code,
     Image,
     List,
-    CheckCircle,
-    GripVertical,
     Plus,
     X,
-    Loader2,
-    AlertTriangle,
 } from 'lucide-react';
 
 // Import the specific icons correctly:
 import {
     Heading1 as H1Icon,
-    Heading2 as H2Icon,
     // P as PIcon, // Removed as 'P' is not exported by 'lucide-react'
 } from 'lucide-react';
 import addLesson from '@/utils/addLesson';
@@ -809,23 +801,24 @@ const PageBuilderCanvas = () => {
         }
     };
 
-    const loadPage = () => {
-        try {
-            const data = localStorage.getItem('pageData');
-            if (data) {
-                const loadedComponents = JSON.parse(data);
-                // Basic validation of loaded data
-                if (Array.isArray(loadedComponents)) {
-                    // Further validation of individual components can be added here
-                    setComponents(loadedComponents);
-                } else {
-                    setError('Invalid data in localStorage.');
-                }
-            }
-        } catch (err) {
-            setError('Failed to load page.');
-        }
-    };
+    // const loadPage = () => {
+    //     try {
+    //         const data = localStorage.getItem('pageData');
+    //         if (data) {
+    //             const loadedComponents = JSON.parse(data);
+    //             // Basic validation of loaded data
+    //             if (Array.isArray(loadedComponents)) {
+    //                 // Further validation of individual components can be added here
+    //                 setComponents(loadedComponents);
+    //             } else {
+    //                 setError('Invalid data in localStorage.');
+    //             }
+    //         }
+    //     } catch (err) {
+    //         setError('Failed to load page.');
+    //         console.log(err)
+    //     }
+    // };
 
     const clearPage = () => {
         setComponents([]);
@@ -873,6 +866,7 @@ const PageBuilderCanvas = () => {
 
             } catch (err) {
                 setError('Failed to export and add lesson.');
+                console.log(err)
             }
         };
 
@@ -892,8 +886,12 @@ const PageBuilderCanvas = () => {
                         setError('Invalid file content: Expected an array of components.');
                     }
                 }
-            } catch (error: any) {
-                setError(`Error parsing file: ${error.message}`);
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    setError(`Error parsing file: ${error.message}`);
+                } else {
+                    setError("An unknown error occurred");
+                }
             }
         };
         reader.onerror = () => {
