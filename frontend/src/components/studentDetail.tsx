@@ -79,7 +79,6 @@ export default function StudentDetailTable() {
                             formattedData.push(formatted);
                             idx++;
                         }
-                        console.log(formattedData)
                     } catch (error) {
                         console.error('Error fetching course:', error);
                     }
