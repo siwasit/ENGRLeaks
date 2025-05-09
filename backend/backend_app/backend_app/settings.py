@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key')
+# SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key')
+SECRET_KEY = 'django-insecure-iz_r_d_a@r1x_&-&s-#yxbob)7^u%!&-^9=kfdspu&fcgo4ds)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'backend']
 
 AUTH_USER_MODEL = 'ENGRBackend.User'
 
@@ -58,12 +58,12 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000', 'http://192.168.75.1:3000', 'https://40b2-203-131-211-114.ngrok-free.app'
+    'http://localhost:3000', 'http://localhost:3001', 'http://192.168.75.1:3000', 'https://40b2-203-131-211-114.ngrok-free.app'
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000', 'http://192.168.75.1:3000', 'https://40b2-203-131-211-114.ngrok-free.app'  # Your Next.js frontend URL
+    'http://localhost:3000', 'http://localhost:3001', 'http://192.168.75.1:3000', 'https://40b2-203-131-211-114.ngrok-free.app'  # Your Next.js frontend URL
 ]
 
 CSRF_COOKIE_HTTPONLY = False

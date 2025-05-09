@@ -10,7 +10,6 @@ import Paragraph from "@/templates/paragraph";
 import RunTimeIDE from "@/templates/runtimeIDE";
 import RunTimeExercise from "@/templates/runtimeIDETest";
 import React, { useEffect, useState } from "react";
-import lesson1 from "../Lesson1";
 import axios from "axios";
 import { useParams } from "next/navigation";
 
@@ -66,8 +65,6 @@ export default function CoursePage() {
     if (!course_id || course_id === '0') {
         return (<><p>ID not found</p></>);
     }
-
-    console.log(lessonsData);
 
     return (
         <div className="relative min-h-screen flex flex-col" style={{ background: 'linear-gradient(to bottom right, #FFCB91, #FE7474)' }}>
