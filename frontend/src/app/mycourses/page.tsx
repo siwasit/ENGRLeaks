@@ -9,7 +9,8 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
 
 type EnrollmentTableParameters = {
-    id: number
+    idx: number;
+    id: number;
     title: string;
     progress: string;
     enrollDate: string;
@@ -91,7 +92,8 @@ export default function MyCoursesPage() {
                     const rawDate = res.data.created_at;
                     const formattedDate = new Date(rawDate).toLocaleDateString('en-GB');
                     const formatted = {
-                        id: idx,
+                        idx: idx,
+                        id: res.data.id,
                         title: res.data.course_name,
                         progress: `${enr.learned_lesson.length}/${res.data.total_lessons}`, // Update if real total lessons are available
                         enrollDate: formattedDate, // Replace with actual date if available
@@ -176,7 +178,7 @@ export default function MyCoursesPage() {
                                     </button>
                                     <button
                                         className="bg-[#28A745] cursor-pointer text-white w-20 py-1 rounded hover:bg-green-500 transition-colors"
-                                        onClick={() => router.push('/course')}
+                                        onClick={() => router.push(`/course/${course.id}`)}
                                     >
                                         Resume
                                     </button>

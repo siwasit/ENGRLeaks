@@ -2,13 +2,20 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-// Removed duplicate import of CourseHeader
 import RunTimeIDE from "@/templates/runtimeIDE";
 import RunTimeExercise from "@/templates/runtimeIDETest";
 import CourseHeader from '@/templates/courseHeader';
 import Paragraph from '@/templates/paragraph';
 import CourseImageProps from '@/templates/image_component';
 import MultipleChoiceExercise from '@/templates/multipleChoiceExercise';
+import { text } from 'stream/consumers';
+import Footer from '@/components/footer';
+import { divMode } from '@tsparticles/engine';
+import CodeMirror from "@uiw/react-codemirror";
+import { html } from "@codemirror/lang-html";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { TerminalSquare } from 'lucide-react';
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import {
     Code,
     Image,
@@ -27,13 +34,9 @@ import {
     Heading2 as H2Icon,
     // P as PIcon, // Removed as 'P' is not exported by 'lucide-react'
 } from 'lucide-react';
-import { text } from 'stream/consumers';
-import Footer from '@/components/footer';
-import { divMode } from '@tsparticles/engine';
-import CodeMirror from "@uiw/react-codemirror";
-import { html } from "@codemirror/lang-html";
-import { oneDark } from "@codemirror/theme-one-dark";
-import { TerminalSquare } from 'lucide-react';
+import addLesson from '@/utils/addLesson';
+
+
 // ===============================
 // Types & Interfaces
 // ===============================
@@ -46,7 +49,7 @@ type ComponentType =
     | 'IDERuntimeExercise'
     | 'Image'
     | 'ExerciseChoice'
-    | 'Text'; // Added 'Text' to the ComponentType
+    | 'Text';
 
 interface BaseComponent {
     id: string;
@@ -158,14 +161,6 @@ interface ExerciseChoiceComponent extends BaseComponent {
     correctChoice?: number;
     onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
-
-// interface RuntimeIDExerciseComponent extends BaseComponent {
-//     type: 'IDERuntimeExercise';
-//     initialCode: string;
-//     title: string;
-//     instructions: string;
-//     expectedOutput: string;
-// }
 
 type ComponentData = BaseComponent | ImageComponent | ExerciseChoiceComponent;
 
@@ -594,25 +589,25 @@ const RenderComponent: React.FC<{
                                                 title="Output Preview"
                                             />
                                         </div>
-                                    </div>     
+                                    </div>
                                 </div>
                             </div>
                             <input
-                                    type="text"
-                                    name="expectedOutput"
-                                    value={localComponent.expectedOutput}
-                                    onChange={(e) => {
-                                        setLocalComponent({
-                                            ...localComponent,
-                                            expectedOutput: e.target.value,
-                                        });
-                                        onUpdateComponent(localComponent.id, {
-                                            expectedOutput: e.target.value,
-                                        });
-                                    }}
-                                    placeholder="Expected Output"
-                                    className="text-base mt-4 ml-1 text-[#333] bg-transparent focus:outline-none w-full"
-                                />
+                                type="text"
+                                name="expectedOutput"
+                                value={localComponent.expectedOutput}
+                                onChange={(e) => {
+                                    setLocalComponent({
+                                        ...localComponent,
+                                        expectedOutput: e.target.value,
+                                    });
+                                    onUpdateComponent(localComponent.id, {
+                                        expectedOutput: e.target.value,
+                                    });
+                                }}
+                                placeholder="Expected Output"
+                                className="text-base mt-4 ml-1 text-[#333] bg-transparent focus:outline-none w-full"
+                            />
                         </div>
                     </div>
 
@@ -739,8 +734,25 @@ const RenderComponent: React.FC<{
 // ===============================
 
 const PageBuilderCanvas = () => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [lessonName, setLessonName] = useState('');
+    const [data, setData] = useState('');
+    const params = useParams();
+    const id = params?.id as string;
+    const [courseID, setCourseID] = useState(id);
+
+    const router = useRouter();
+
+    if (!id || id === '0') {
+        return (<><p>ID not found</p></>);
+    }
+
     useEffect(() => {
         setComponents((prevComponents) => [...prevComponents]); // Ensure components are initialized
+        if (!localStorage.getItem('csrf_token_initialized')) {
+            getCsrfToken();
+            localStorage.setItem('csrf_token_initialized', 'true');
+        }
     }, []);
 
     const [components, setComponents] = useState<ComponentData[]>([]);
@@ -820,39 +832,49 @@ const PageBuilderCanvas = () => {
         localStorage.removeItem('pageData');
     };
 
-    const exportPage = () => {
-        try {
-            const data = JSON.stringify(
-                components.map((component) => {
-                    if (component.type === 'ExerciseChoice') {
-                        const exerciseComponent = component as ExerciseChoiceComponent;
-                        return {
-                            ...exerciseComponent,
-                            choices: exerciseComponent.options.map((option) => option.text), // Map options to choices as strings
-                            correctChoice: exerciseComponent.options.findIndex((option) => option.isCorrect),
-                        };
-                    } else if (component.type === 'IDERuntimeTutorial') {
-                        return {
-                            ...component,
-                            content: component.content,
-                        };
-                    }
-                    return component;
-                }),
-                null,
-                2
-            ); // Pretty print JSON
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'page-data.json';
-            a.click();
-            URL.revokeObjectURL(url); // Clean up
-        } catch (err) {
-            setError('Failed to export page.');
-        }
-    };
+    const
+        exportPage = async () => {
+            try {
+                const data = JSON.stringify(
+                    components.map((component) => {
+                        if (component.type === 'ExerciseChoice') {
+                            const exerciseComponent = component as ExerciseChoiceComponent;
+                            return {
+                                ...exerciseComponent,
+                                choices: exerciseComponent.options.map((option) => option.text), // Map options to choices as strings
+                                correctChoice: exerciseComponent.options.findIndex((option) => option.isCorrect),
+                            };
+                        } else if (component.type === 'IDERuntimeTutorial') {
+                            return {
+                                ...component,
+                                content: component.content,
+                            };
+                        }
+                        return component;
+                    }),
+                    null,
+                    2
+                ); // Pretty print JSON
+
+                setData(data);
+
+                const lessonName = prompt("Please enter the lesson name:");
+                if (!lessonName) {
+                    alert("Lesson name is required!");
+                    return;
+                }
+                // await setLessonName(name);
+                const status = await addLesson(courseID, lessonName, data);
+
+                if (status === 201) {
+                    alert("Lesson exported and added successfully!");
+                    router.push('/dashboard');
+                }
+
+            } catch (err) {
+                setError('Failed to export and add lesson.');
+            }
+        };
 
     const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -901,7 +923,13 @@ const PageBuilderCanvas = () => {
                         {/* <button onClick={savePage} className="bg-green- 500/20 text-green-400 hover:bg-green-500/30 hover:text-green-300 rounded-md px-4 py-2">Save</button> */}
                         {/* <button onClick={loadPage} className="bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 hover:text-blue-300 rounded-md px-4 py-2">Load</button> */}
                         <button onClick={clearPage} className="bg-red-500 text-red-100 hover:bg-red-600 cursor-pointer hover:text-red-100 rounded-md px-4 py-2">Clear</button>
-                        <button onClick={exportPage} className="bg-green-500 text-white hover:bg-green-300 cursor-pointer hover:text-green-100 hover:bg-green-600 rounded-md px-4 py-2">Add Lesson</button>
+                        <button onClick={
+                            async () => {
+                                await exportPage();
+                                setModalOpen(true);
+                            }
+                            // exportPage
+                        } className="bg-green-500 text-white hover:bg-green-300 cursor-pointer hover:text-green-100 hover:bg-green-600 rounded-md px-4 py-2">Add Lesson</button>
                         <input
                             type="file"
                             accept=".json"
@@ -955,6 +983,26 @@ const PageBuilderCanvas = () => {
                     </aside>
                 )}
 
+                {/* {modalOpen && (
+                    <LessonNameModal
+                        isOpen={modalOpen}
+                        onClose={() => { setModalOpen(false); return; }}
+                        onSave={ async (name) => {
+                            const lessonName = prompt("Please enter the lesson name:");
+                            if (!lessonName) {
+                                alert("Lesson name is required!");
+                                return;
+                            }
+                            // await setLessonName(name);
+                            const status = await addLesson(courseID, lessonName, data);
+
+                            if (status === 201) {
+                                // alert("Lesson exported and added successfully!");
+                                router.push('/dashboard');
+                            }
+                        }}
+                    />
+                )} */}
 
                 {/* Canvas Area */}
                 <section
@@ -1062,3 +1110,7 @@ const PageBuilderCanvas = () => {
 };
 
 export default PageBuilderCanvas;
+function getCsrfToken() {
+    throw new Error('Function not implemented.');
+}
+

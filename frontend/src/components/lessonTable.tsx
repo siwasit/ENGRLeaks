@@ -26,7 +26,7 @@ export default function CourseTable() {
 
     const [courses, setCourses] = useState<{ id: number; creator: string; course_name: string; course_description: string; total_lessons: number; total_exercises: number; created_at: string }[]>([]);
     
-    const [selectedCourse, setSelectedCourse] = useState("");
+    const [selectedCourse, setSelectedCourse] = useState("0");
     const [tableData, setTableData] = useState<CourseTableParam[]>([]);
 
     const handleAddCourse = (e: React.FormEvent) => {
@@ -34,6 +34,7 @@ export default function CourseTable() {
     }
 
     const router = useRouter();
+    const routerRoute = useRouter
 
     const retrieveCourse = async () => {
         try {
@@ -78,7 +79,6 @@ export default function CourseTable() {
                 await retrieveLessonByCourseId(selectedCourse)
             }
             // window.location.reload()
-            alert("Lesson deleted successfully")
         } catch (error) {
             console.error('Error during unenrollment:', error);
         }
@@ -125,6 +125,7 @@ export default function CourseTable() {
     }, [selectedCourse]);
     
     return (
+        
         <div className="flex flex-col my-4">
             <div className="flex justify-between items-center">
                 <select
@@ -138,15 +139,21 @@ export default function CourseTable() {
                         </option>
                     ))}
                 </select>
-
+                
                 <button
                     className="relative cursor-pointer text-[20px] py-1 text-white px-4 rounded-lg inline-block"
-                    style={{
+                    style={ selectedCourse === '0' ? {
+                        background: 'linear-gradient(to bottom right, #A9A9A9, #D3D3D3)', // Disabled color
+                        cursor: 'not-allowed',
+                    } : {
                         background: 'linear-gradient(to bottom right, #FE7474, #FFCB91)',
                     }}
                     onClick={() => {
-                        router.push("/addlesson");
+                        if (selectedCourse !== '0') {
+                            router.push(`/addlesson/${Number(selectedCourse)}`);
+                        }
                     }}
+                    disabled={selectedCourse === '0'}
                 >
                     <div className="absolute top-0 left-0 w-full h-full bg-[#C5211C] opacity-25 rounded-lg"></div>
                     <span className="relative z-10 font-medium">Add lesson</span>

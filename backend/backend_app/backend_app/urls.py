@@ -31,6 +31,7 @@ urlpatterns = [
     path('delete_enroll/', enrollment_view.unenroll, name='unenroll'),
 
     path('lessons/', course_views.get_all_lessons, name='get_all_lessons'),
+    path('add_lesson/<str:course_id>', course_views.add_lesson, name='add_lesson'),
     path('lessons/<int:lesson_id>/', course_views.get_lesson_byid, name='get_lesson_byid'),
     path('lessons/course/<int:course_id>', course_views.get_all_lessons_by_course, name='get_all_lessons_by_course'),
     path('delete_lessons/<str:lesson_id>', course_views.delete_lesson_by_id, name='delete_lessons'),

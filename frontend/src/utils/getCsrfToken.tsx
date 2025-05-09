@@ -1,4 +1,8 @@
 export const getCsrfTokenFromCookies = () => {
+    // if (!document) {
+    //     console.log('Document not found.');
+    //     return null;
+    // }
     const cookieName = 'csrftoken=';
     const cookies = document.cookie.split(';');
 

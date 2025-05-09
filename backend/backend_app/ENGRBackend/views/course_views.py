@@ -1,9 +1,10 @@
 import json
 from django.http import JsonResponse
 from django.shortcuts import render
-from ENGRBackend.models import Course, Lesson
+from ENGRBackend.models import Course, Lesson, User
 from django.core.serializers import serialize
 from django.db.models import F
+from django.core.exceptions import ObjectDoesNotExist
 
 def get_all_courses(request):
     courses = Course.objects.all()
@@ -76,31 +77,40 @@ def get_lesson_byid(request, lesson_id):
         return JsonResponse({'error': 'Lesson not found'}, status=404)
     
 def get_all_lessons_by_course(request, course_id):
-    # Fetch all lessons for the given course ID
-    lessons = Lesson.objects.filter(course_id=course_id).all()
+    try:
+        # Fetch all lessons for the given course ID
+        lessons = Lesson.objects.filter(course_id=course_id).all()
 
-    lessons_data = []
+        lessons_data = []
 
-    # Iterate through each lesson and format the data
-    for lesson in lessons:
-        # Parse the body field (it's a string containing JSON)
-        body_data = json.loads(lesson.body)
+        # Iterate through each lesson and format the data
+        for lesson in lessons:
+            try:
+                # Parse the body field (it's a string containing JSON)
+                body_data = json.loads(lesson.body)
+            except json.JSONDecodeError:
+                # Handle invalid JSON format in the body
+                body_data = {"error": "Invalid JSON format in lesson body"}
 
-        # Create a structured dictionary to return
-        lesson_data = {
-            'id': lesson.id,
-            'creator': f"{lesson.creator.name} {lesson.creator.surname}",  # Assuming 'username' is a field in the User model
-            'course': lesson.course.id,  # Assuming you want the course ID
-            'lesson_name': lesson.lesson_name,
-            'body': body_data,  # Parsed JSON from the body field
-            'created_at': lesson.created_at.isoformat(),
-        }
+            # Create a structured dictionary to return
+            lesson_data = {
+                'id': lesson.id,
+                'creator': f"{lesson.creator.name} {lesson.creator.surname}",  # Assuming 'name' and 'surname' are fields in the User model
+                'course': lesson.course.id,  # Assuming you want the course ID
+                'lesson_name': lesson.lesson_name,
+                'body': body_data,  # Structured JSON from the body field
+                'created_at': lesson.created_at.isoformat(),
+            }
 
-        # Append the formatted lesson data to the list
-        lessons_data.append(lesson_data)
-    
-    # Return a JsonResponse with the lesson data
-    return JsonResponse({'lessons': lessons_data}, status=200)
+            # Append the formatted lesson data to the list
+            lessons_data.append(lesson_data)
+
+        # Return a JsonResponse with the lesson data
+        return JsonResponse({'lessons': lessons_data}, status=200)
+
+    except ObjectDoesNotExist:
+        # Handle the case where the course does not exist
+        return JsonResponse({'error': 'Course not found'}, status=404)
 
 def add_course(request):
     if request.method == 'POST':
@@ -158,3 +168,29 @@ def delete_lesson_by_id(request, lesson_id):
         return JsonResponse({'message': 'Lesson deleted successfully'}, status=200)
     except Course.DoesNotExist:
         return JsonResponse({'error': 'Lesson not found'}, status=404)
+    
+def add_lesson(request, course_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        lesson_name = data.get('lesson_name')
+        body = data.get('body')
+        user_id = data.get('user_id')
+
+        try:
+            course = Course.objects.get(id=course_id)
+            creator = User.objects.get(id=user_id)
+
+            # Create a new lesson instance
+            new_lesson = Lesson(
+                course=course,
+                lesson_name=lesson_name,
+                body=json.dumps(body),  # Store the body as a JSON string
+                creator=creator
+            )
+            new_lesson.save()
+
+            return JsonResponse({'message': 'Lesson created successfully'}, status=201)
+        except Course.DoesNotExist:
+            return JsonResponse({'error': 'Course not found'}, status=404)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
