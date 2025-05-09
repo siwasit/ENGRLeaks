@@ -924,7 +924,7 @@ const PageBuilderCanvas = () => {
             <main className="flex-1 flex flex-col md:flex-row">
                 {/* Sidebar */}
                 {isEditMode && (
-                    <aside className="w-full md:w-64 bg-red-800 p-4 border-r border-gray-800 space-y-4">
+                    <aside className="w-full md:w-64 bg-red-800 py-4 pl-4 pr-2 border-r border-gray-800 space-y-4">
                         <h2 className="text-white text-lg font-semibold">Components</h2>
 
                         {/* Sticky Wrapper */}

@@ -51,7 +51,6 @@ class Course(models.Model):
     description = models.TextField()
     total_lessons = models.IntegerField()
     total_exercises = models.IntegerField(default=0)
-    status = models.CharField(max_length=50, default='Unenroll')  # e.g., 'draft', 'published'
     created_at = models.DateTimeField(auto_now_add=True)
 
     # def save(self, *args, **kwargs):
@@ -65,6 +64,7 @@ class Course(models.Model):
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons')
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_lessons', default=1)
     lesson_name = models.CharField(max_length=255)
     body = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -76,7 +76,7 @@ class Lesson(models.Model):
 class Enrollment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='enrollments')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='enrollments')
-    learned_lesson = models.JSONField(default=list)
+    learned_lesson = models.JSONField(default=list, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

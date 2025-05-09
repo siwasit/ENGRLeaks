@@ -8,6 +8,8 @@ interface CourseCardProps {
     totalLessons: number;
     totalExercises: number;
     status: string;
+    course_id: number;
+    callable?: (id: number) => void;
 }
 
 // Simplified cn function (if you don't have a utility library)
@@ -20,6 +22,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
     totalLessons,
     totalExercises,
     status,
+    course_id,
+    callable
 }) => {
     let statusColor = '';
 
@@ -27,11 +31,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
         case 'Resume':
             statusColor = 'bg-[#FFB915] text-[24px] text-white';
             break;
-        case 'Enroll now!':
-            statusColor = 'bg-[#28A745] text-[24px] text-white';
+        case 'Enroll Now!':
+            statusColor = 'bg-rose-300 text-[24px] text-white';
             break;
         case 'Finished':
-            statusColor = 'bg-orange-400 text-[24px] text-white';
+            statusColor = 'bg-green-500 text-[24px] text-white';
             break;
         case 'Unenroll':
             statusColor = 'bg-red-500 text-[24px] text-white';
@@ -111,15 +115,16 @@ const CourseCard: React.FC<CourseCardProps> = ({
                 </div>
                 <div>
                     <button
+                    onClick={() => callable?.(course_id)}
                         className={cn(
-                            'w-[13.6rem] py-2 rounded-md font-semibold', // Increased padding
+                            'w-50 py-2 rounded-md font-semibold', // Increased padding
                             statusColor,
                             'transition-colors duration-200',
                             'hover:cursor-pointer',
                             status === 'Resume' ? 'hover:bg-yellow-500' : '',
                             status === 'Unenroll' ? 'hover:bg-red-600' : '',
-                            status === 'Finished' ? 'hover:bg-orange-500' : '',
-                            status === 'Enroll now!' ? 'hover:bg-green-700' : '',
+                            status === 'Finished' ? 'hover:bg-green-600' : '',
+                            status === 'Enroll Now!' ? 'hover:bg-pink-400' : '',
                         )}
                     >
                         {status}

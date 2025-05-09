@@ -58,12 +58,12 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000', 'http://192.168.75.1:3000', 'https://89e4-2405-9800-ba00-ca0-e5cd-ff4a-d6f6-dd95.ngrok-free.app'
+    'http://localhost:3000', 'http://192.168.75.1:3000', 'https://40b2-203-131-211-114.ngrok-free.app'
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000', 'http://192.168.75.1:3000'  # Your Next.js frontend URL
+    'http://localhost:3000', 'http://192.168.75.1:3000', 'https://40b2-203-131-211-114.ngrok-free.app'  # Your Next.js frontend URL
 ]
 
 CSRF_COOKIE_HTTPONLY = False

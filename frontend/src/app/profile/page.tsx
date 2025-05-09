@@ -8,6 +8,30 @@ import ParticlesComponent from "@/components/particle";
 import axios from "axios";
 import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
 
+export function getUserIdFromToken() {
+    const access_token = localStorage.getItem('access_token');
+    if (!access_token) {
+        console.error('No access token found');
+        return null;
+    }
+
+    try {
+        const base64Url = access_token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split('')
+                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+        );
+        const decodedUserID = JSON.parse(jsonPayload);
+        return decodedUserID.user_id;
+    } catch (error) {
+        console.error('Failed to decode token:', error);
+        return null;
+    }
+}
+
 export default function ProfilePage() {
     const [accountName, setAccountName] = useState("");
     const [name, setName] = useState("");
@@ -31,30 +55,6 @@ export default function ProfilePage() {
     //         return null;
     //     }
     // };
-
-    function getUserIdFromToken() {
-        const access_token = localStorage.getItem('access_token');
-        if (!access_token) {
-            console.error('No access token found');
-            return null;
-        }
-
-        try {
-            const base64Url = access_token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(
-                atob(base64)
-                    .split('')
-                    .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                    .join('')
-            );
-            const decodedUserID = JSON.parse(jsonPayload);
-            return decodedUserID.user_id;
-        } catch (error) {
-            console.error('Failed to decode token:', error);
-            return null;
-        }
-    }
 
     const retrieveProfile = async () => {
         const userId = getUserIdFromToken();

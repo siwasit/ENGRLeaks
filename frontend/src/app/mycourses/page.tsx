@@ -3,6 +3,7 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import ParticlesComponent from "@/components/particle";
+import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
@@ -15,7 +16,7 @@ type EnrollmentTableParameters = {
     lecturer: string;
 };
 
-type Enrollment = {
+export type Enrollment = {
     user: string,
     course: string,
     learned_lesson: string[],
@@ -107,6 +108,26 @@ export default function MyCoursesPage() {
         setData(data);
     };
 
+    const handleUnenroll = async (course_id: number) => {
+        const csrfToken = getCsrfTokenFromCookies();
+        try {
+            await axios.delete('http://localhost:8000/delete_enroll/', {
+                data: {
+                    user_id: getUserIdFromToken(),
+                    course_id: course_id,
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken, // Use the fetched CSRF token
+                },
+                withCredentials: true, // Include cookies in the request
+            });
+            retrieveCourseData();
+        } catch (error) {
+            console.error('Error during unenrollment:', error);
+        }
+    }
+
     useEffect(() => {
         retrieveCourseData();
     }, []);
@@ -142,7 +163,17 @@ export default function MyCoursesPage() {
                                 <td className="border border-gray-300 px-4 py-2 text-center">{course.enrollDate}</td>
                                 <td className="border border-gray-300 px-4 py-2 text-center">{course.lecturer}</td>
                                 <td className="border flex justify-center space-x-4 border-gray-300 py-2">
-                                    <button className="bg-[#C5211C] cursor-pointer text-white w-20 py-1 rounded hover:bg-red-600 transition-colors">Unenroll</button>
+                                    <button 
+                                        className="bg-[#C5211C] cursor-pointer text-white w-20 py-1 rounded hover:bg-red-600 transition-colors"
+                                        onClick={() => {
+                                            const confirmed = window.confirm("Are you sure you want to unenroll from this course?");
+                                            if (confirmed) {
+                                              handleUnenroll(course.id);
+                                            }
+                                        }}
+                                    >
+                                        Unenroll
+                                    </button>
                                     <button
                                         className="bg-[#28A745] cursor-pointer text-white w-20 py-1 rounded hover:bg-green-500 transition-colors"
                                         onClick={() => router.push('/course')}

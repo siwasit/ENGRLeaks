@@ -17,7 +17,6 @@ def get_all_courses(request):
             'course_description': course.description,
             'total_lessons': course.total_lessons,
             'total_exercises': course.total_exercises,
-            'status': course.status,
             'created_at': course.created_at.isoformat(),
         }
         courses_data.append(course_data)
@@ -26,7 +25,7 @@ def get_all_courses(request):
 def get_course_byid(request, course_id):
     course = Course.objects.filter(id=course_id).annotate(
         creator_name=F('creator__account_name')
-    ).values('id', 'creator_name', 'course_name', 'description', 'total_lessons', 'total_exercises', 'status', 'created_at').first()
+    ).values('id', 'creator_name', 'course_name', 'description', 'total_lessons', 'total_exercises', 'created_at').first()
     if course:
         return JsonResponse(course, status=200)
     else:
@@ -90,6 +89,7 @@ def get_all_lessons_by_course(request, course_id):
         # Create a structured dictionary to return
         lesson_data = {
             'id': lesson.id,
+            'creator': f"{lesson.creator.name} {lesson.creator.surname}",  # Assuming 'username' is a field in the User model
             'course': lesson.course.id,  # Assuming you want the course ID
             'lesson_name': lesson.lesson_name,
             'body': body_data,  # Parsed JSON from the body field
@@ -150,3 +150,11 @@ def update_course(request, course_id):
             return JsonResponse({'error': 'Course not found'}, status=404)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def delete_lesson_by_id(request, lesson_id):
+    try:
+        lesson = Lesson.objects.get(id=lesson_id)
+        lesson.delete()
+        return JsonResponse({'message': 'Lesson deleted successfully'}, status=200)
+    except Course.DoesNotExist:
+        return JsonResponse({'error': 'Lesson not found'}, status=404)
