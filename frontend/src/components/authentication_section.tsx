@@ -71,7 +71,7 @@ export default function AuthenticationSection() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://127.0.0.1:8000/api/token/', {
+            const res = await axios.post('http://localhost:8000/api/token/', {
                 email: emailLogin,
                 password: passwordLogin,
             });
@@ -120,7 +120,7 @@ export default function AuthenticationSection() {
         }
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/register/', {
+            const response = await fetch('http://localhost:8000/api/register/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

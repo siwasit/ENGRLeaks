@@ -6,6 +6,8 @@ import Navbar from '@/components/navbar';
 import QuizWrapper from '@/components/landing_page_quiz';
 import CourseFilteringSection from '@/components/course_filtering_section';
 import ParticlesComponent from '@/components/particle';
+import axios from 'axios';
+import { Enrollment } from '../mycourses/page';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -39,19 +41,20 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             {/* Foreground content */}
             <div className="relative flex flex-col min-h-screen">
                 <div className='z-3'><Navbar activePage='' /></div>
-                
-                <main className="flex-1 relative z-2"> {children}</main>
-                <div className='z-[1]'><ParticlesComponent /></div>
-                <div className='relative z-[-1]'><Footer /></div>
+
+                <main className="flex-1 relative z-5"> {children}</main>
+                <div className='z-[2]'><ParticlesComponent /></div>
+                <div className='relative z-[1]'><Footer /></div>
             </div>
         </div>
     );
 };
 
 const Home = () => {
+
     return (
         <Layout>
-            
+
             <div className="container mx-auto pt-200 pb-20 flex-grow relative">
                 {/* Gradient Text Layer */}
                 <p
@@ -144,7 +147,7 @@ const Home = () => {
                             </ul>
                         </div>
                     </div>
-                    
+
                     <div className='flex flex-row items-center justify-end h-full'>
                         <Image src="/images/tu01.jpg" alt="Web icon" width={550} height={0} className="object-cover h-full" priority />
                     </div>
@@ -156,8 +159,8 @@ const Home = () => {
                     </h2>
                 </div>
 
-               <CourseFilteringSection></CourseFilteringSection>
-               
+                <CourseFilteringSection></CourseFilteringSection>
+
             </div>
         </Layout>
     );

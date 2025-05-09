@@ -9,7 +9,7 @@ type RunTimeIDEProps = {
     title: string;
 };
 
-export default function RunTimeIDE({ initialCode = '<h1 class="title">Hello <span>World</span></h1>', title }: RunTimeIDEProps) {
+export default function RunTimeIDE({ initialCode = '', title }: RunTimeIDEProps) {
     const [code, setCode] = useState<string>(initialCode);
 
     return (

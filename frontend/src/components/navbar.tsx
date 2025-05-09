@@ -12,11 +12,15 @@ interface NavItem {
     icon?: React.ReactNode; // Optional icon
 }
 
-const navItems: NavItem[] = [
+const authenticatedNavItems: NavItem[] = [
     { label: 'Courses', href: '/' },
     { label: 'My Courses', href: '/mycourses' },
     { label: 'Profile', href: '/profile' },
     // { label: 'Sign in', href: '/' },
+];
+
+const unauthenticatedNavItems: NavItem[] = [
+    { label: 'Courses', href: '/' },
 ];
 
 interface NavbarProps {
@@ -51,23 +55,48 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
         router.push('/authenticate');  // Replace with your authentication page route
     };
 
+    const getCsrfToken = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/get_csrf/', {
+                withCredentials: true,  // Include cookies in request
+            });
+
+            document.cookie = `csrftoken=${response.data.csrfToken}; path=/;`;
+            return response
+        } catch (error) {
+            console.error('Error fetching CSRF token:', error);
+            return null;
+        }
+    };
+
+    const checkAccessToken = () => {
+        const accessToken = localStorage.getItem('access_token');
+
+        if (!accessToken) {
+            // Redirect to home page if no access token
+            window.location.href = '/';
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         setIsLogin(false);
         // router.push('/');  // Redirect to login page
-        // Redirect user to login page
+        window.location.href = '/';
     };
 
     useEffect(() => {
         const access_token = localStorage.getItem('access_token');
         const refresh_token = localStorage.getItem('refresh_token');
         if (access_token) {
-            console.log('Retrieved Token:', access_token);
-            console.log('Retrieved Token:', refresh_token);
             setIsLogin(true);
         } else {
             console.log('No token found');
+        }
+        if (!localStorage.getItem('csrf_token_initialized')) {
+            getCsrfToken();
+            localStorage.setItem('csrf_token_initialized', 'true');
         }
     }, []);  // Empty dependency array ensures it runs only on client-side mount
 
@@ -86,7 +115,19 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
                 </div>
                 <div className="flex items-center space-x-8">
                     <ul className="flex space-x-12">
-                        {navItems.map((item) => (
+                        {isLogin ? authenticatedNavItems.map((item) => (
+                            <li key={item.label} className="group">
+                                <a
+                                    href={item.href}
+                                    className={`text-white font-bold text-[20px] hover:text-primary transition-colors flex items-center relative 
+                                        ${activePage === item.label ? 'text-primary' : ''}`}
+                                >
+                                    {item.label}
+                                    <span className={`absolute bottom-[-5px] left-0 w-0 h-[3px] bg-white transition-all duration-300 group-hover:w-full 
+                                        ${activePage === item.label ? 'w-full' : ''}`}></span>
+                                </a>
+                            </li>
+                        )) : unauthenticatedNavItems.map((item) => (
                             <li key={item.label} className="group">
                                 <a
                                     href={item.href}

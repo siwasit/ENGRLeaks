@@ -1,17 +1,120 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 export default function StudentDetailTable() {
+
+    const [selectedStudent, setSelectedStudent] = useState("");
+    const [users, setUsers] = useState<{ id: number; email: string; account_name: string; name: string; surname: string; role: string; created_at: string }[]>([]);
+    const [enrolledCourses, setEnrolledCourses] = useState<EnrollmentTableParameters[]>([]);
+
+    type EnrollmentTableParameters = {
+        id: number
+        title: string;
+        progress: string;
+        enrollDate: string;
+        status: string;
+    };
+
+    interface Course {
+        id: number;
+        course_name: string;
+        total_lessons: number;
+    }
+
+    interface Enrollment {
+        id: number;
+        course_id: string;
+        course__course_name: string;
+        total_lesson: number;
+        learned_lesson: number;
+    }
+
+    const retrieveUsers = async () => {
+        try {
+            const res = await axios.get("http://localhost:8000/users/");
+            if (res.status === 200) {
+                const usersData = res.data.users;
+
+                const blankUser = {
+                    id: 0,
+                    email: "",
+                    account_name: "",
+                    name: "",
+                    surname: "",
+                    role: "",
+                    created_at: ""
+                };
+
+                const updatedUsersData = [blankUser, ...usersData];
+
+                setUsers(updatedUsersData);
+            } else {
+                console.error("Failed to retrieve users:", res.statusText);
+            }
+        } catch (error) {
+            console.error("Error retrieving users:", error);
+        }
+    }
+
+    const retrieveUsersEnrolledCourses = async (studentId: string) => {
+        let formattedData: EnrollmentTableParameters[] = [];
+        let idx = 1;
+        try {
+            const res = await axios.get(`http://localhost:8000/enrollments/${studentId}/`);
+            if (res.status === 200) {
+                const enrollments = res.data.enrollments;
+                for (const e of enrollments) {
+                    try {
+                        const courseRes = await axios.get(`http://localhost:8000/courses/${e.course_id}/`);
+                        if (courseRes.status === 200) {
+                            const rawDate = courseRes.data.created_at;
+                            const formattedDate = new Date(rawDate).toLocaleDateString('en-GB');
+                            const formatted = {
+                                id: idx,
+                                title: courseRes.data.course_name,
+                                progress: `${e.learned_lesson.length}/${courseRes.data.total_lessons}`, // Assuming learned_lesson is a number
+                                enrollDate: formattedDate,
+                                status: (e.learned_lesson.length === courseRes.data.total_lessons) ? 'Completed' : 'On-going'
+                            };
+                            formattedData.push(formatted);
+                            idx++;
+                        }
+                    } catch (error) {
+                        console.error('Error fetching course:', error);
+                    }
+                }
+                setEnrolledCourses(formattedData);
+            } else {
+                console.error("Failed to retrieve enrollments:", res.statusText);
+            }
+        } catch (error) {
+            console.error("Error retrieving users courses:", error);
+        }
+    };
+
+    useEffect(() => {
+        retrieveUsers();
+    }, []);
+
+    useEffect(() => {
+        if (selectedStudent) {
+            retrieveUsersEnrolledCourses(selectedStudent);
+        }
+    }, [selectedStudent]);
 
     return (
         <div className="flex flex-col my-4">
             <div className="flex justify-between items-center">
                 <select
                     className="w-1/3 p-2 text-[#AA5B5B] font-medium bg-white border border-[#851515] border-2 rounded focus:outline-none"
-                    defaultValue={"1"}
+                    value={selectedStudent}
+                    onChange={(e) => setSelectedStudent(e.target.value)}
                 >
-                    <option value="1" className="hover:bg-[#F5D0D0]">Siwasit Saengnikun</option>
-                    <option value="2" className="hover:bg-[#F5D0D0]">Worayot Liamkaew</option>
-                    <option value="3" className="hover:bg-[#F5D0D0]">Akkarawoot Takhom</option>
+                    {users.map((user: { id: number; name: string; surname: string }) => (
+                        <option key={user.id} value={user.id.toString()} className="hover:bg-[#F5D0D0]">
+                            {user.name} {user.surname}
+                        </option>
+                    ))}
                 </select>
             </div>
             <div className="z-2 my-2 bg-white p-8 rounded-lg shadow-lg">
@@ -26,33 +129,29 @@ export default function StudentDetailTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="bg-gray-100">
-                            <td className="border border-gray-300 px-4 py-2 text-center">1</td>
-                            <td className="border border-gray-300 px-4 py-2">HTML Beginner</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center max-w-xs truncate">3/20</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">7/5/2568</td>
-                            <td className="border flex justify-center space-x-4 border-gray-300 py-2">
-                                <div className="bg-[#FFB915] text-white w-20 py-1 text-center rounded w-25">On-going</div>
-                            </td>
-                        </tr>
-                        <tr className="">
-                        <td className="border border-gray-300 px-4 py-2 text-center">2</td>
-                            <td className="border border-gray-300 px-4 py-2">HTML Beginner</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center max-w-xs truncate">3/20</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">7/5/2568</td>
-                            <td className="border flex justify-center space-x-4 border-gray-300 py-2">
-                                <div className="bg-[#FFB915] text-white w-20 py-1 text-center rounded w-25">On-going</div>
-                            </td>
-                        </tr>
-                        <tr className="bg-gray-100">
-                        <td className="border border-gray-300 px-4 py-2 text-center">3</td>
-                            <td className="border border-gray-300 px-4 py-2">HTML Beginner</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center max-w-xs truncate">3/20</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">7/5/2568</td>
-                            <td className="border flex justify-center space-x-4 border-gray-300 py-2">
-                                <div className="bg-[#28A745] text-white w-20 py-1 text-center rounded w-25">Completed</div>
-                            </td>
-                        </tr>
+                        {enrolledCourses.length > 0 ? (
+                            enrolledCourses.map((enroll, index) => (
+                                <tr key={enroll.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
+                                    <td className="border border-gray-300 px-4 py-2 text-center">{index + 1}</td>
+                                    <td className="border border-gray-300 px-4 py-2">{enroll.title}</td>
+                                    <td className="border border-gray-300 px-4 py-2 text-center max-w-xs truncate">{enroll.progress}</td>
+                                    <td className="border border-gray-300 px-4 py-2 text-center">
+                                        {enroll.enrollDate}
+                                    </td>
+                                    <td className="border flex justify-center space-x-4 border-gray-300 py-2">
+                                        <div className={`${enroll.status === 'Completed' ? 'bg-[#28A745]' : 'bg-yellow-500'} text-white w-20 py-1 text-center rounded w-25`}>
+                                            {enroll.status}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={5} className="border border-gray-300 px-4 py-2 text-center text-gray-500">
+                                    No data available
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
