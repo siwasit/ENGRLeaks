@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getCsrfTokenFromCookies } from "./getCsrfToken";
-import { getUserIdFromToken } from "@/app/profile/page";
+import { getUserIdFromToken } from "./getUserIdFromToken";
 
 const addLesson = async (courseId: string, lessonName: string, body: string): Promise<number | null> => {
   const csrfToken = getCsrfTokenFromCookies(); // Fetch CSRF token

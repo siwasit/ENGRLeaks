@@ -83,7 +83,7 @@ export default function AuthenticationSection() {
                 window.location.href = '/home';
             }
         } catch (err: any) {
-            console.error('Login failed:', err.response ?? err.message);
+            // console.error('Login failed:', err.response ?? err.message);
 
             // Display error message based on response
             if (err.response) {
@@ -154,7 +154,7 @@ export default function AuthenticationSection() {
         updateSelectColor();
         selectedRole?.addEventListener('change', updateSelectColor);
         selectTab('login', true);
-    }, []);
+    }, [selectTab]);
 
     return (
         <>

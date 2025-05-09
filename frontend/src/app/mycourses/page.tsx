@@ -132,7 +132,7 @@ export default function MyCoursesPage() {
 
     useEffect(() => {
         retrieveCourseData();
-    }, []);
+    }, [retrieveCourseData]);
 
     return (
         <div className="relative min-h-screen flex flex-col" style={{ background: 'linear-gradient(to bottom right, #FFCB91, #FE7474)' }}>

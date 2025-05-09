@@ -8,30 +8,22 @@ import CourseHeader from '@/templates/courseHeader';
 import Paragraph from '@/templates/paragraph';
 import CourseImageProps from '@/templates/image_component';
 import MultipleChoiceExercise from '@/templates/multipleChoiceExercise';
-import { text } from 'stream/consumers';
 import Footer from '@/components/footer';
-import { divMode } from '@tsparticles/engine';
 import CodeMirror from "@uiw/react-codemirror";
 import { html } from "@codemirror/lang-html";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { TerminalSquare } from 'lucide-react';
-import { useParams, useSearchParams, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
     Code,
     Image,
     List,
-    CheckCircle,
-    GripVertical,
     Plus,
     X,
-    Loader2,
-    AlertTriangle,
 } from 'lucide-react';
 
 // Import the specific icons correctly:
 import {
     Heading1 as H1Icon,
-    Heading2 as H2Icon,
     // P as PIcon, // Removed as 'P' is not exported by 'lucide-react'
 } from 'lucide-react';
 import addLesson from '@/utils/addLesson';
@@ -75,9 +67,6 @@ interface EditableCourseHeaderProps {
 }
 
 export function EditableCourseHeader({
-    id,
-    type,
-    content,
     title,
     lecturer,
     onChange,
@@ -109,8 +98,6 @@ export function EditableCourseHeader({
 }
 
 export function EditableParagraph({
-    id,
-    type,
     content,
     title,
     onChange,
@@ -283,7 +270,7 @@ const RenderComponent: React.FC<{
 }> = ({ component, onUpdateComponent, onDeleteComponent, isEditMode }) => {
     const [localComponent, setLocalComponent] = useState<ComponentData>(component);
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    // const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
 
     useEffect(() => {
@@ -321,7 +308,7 @@ const RenderComponent: React.FC<{
         }
     };
 
-    const handleOptionChange = (optionId: string, field: keyof ChoiceOption, value: any) => {
+    const handleOptionChange = (optionId: string, field: keyof ChoiceOption, value: string | boolean) => {
         if (localComponent.type === 'ExerciseChoice') {
             const newOptions = (localComponent as ExerciseChoiceComponent).options.map((option) =>
                 option.id === optionId ? { ...option, [field]: value } : option
@@ -354,12 +341,6 @@ const RenderComponent: React.FC<{
             onUpdateComponent(updatedComponent.id, { options: newOptions });
         }
     };
-    function isExerciseChoiceComponent(
-        component: BaseComponent | ExerciseChoiceComponent
-    ): component is ExerciseChoiceComponent {
-        return component.type === 'ExerciseChoice';
-    }
-
 
     // Focus on input when component is first rendered in edit mode
     useEffect(() => {
@@ -675,9 +656,8 @@ const RenderComponent: React.FC<{
                                 const exerciseComponent = localComponent as ExerciseChoiceComponent;
 
                                 return exerciseComponent.options.map((option) => (
-                                    <div>
-
-                                        <div key={option.id} className="flex items-center gap-2">
+                                    <div key={option.id} >
+                                        <div className="flex items-center gap-2">
                                             <input
                                                 type="text"
                                                 value={option.text}
@@ -734,18 +714,12 @@ const RenderComponent: React.FC<{
 // ===============================
 
 const PageBuilderCanvas = () => {
-    const [modalOpen, setModalOpen] = useState(false);
-    const [lessonName, setLessonName] = useState('');
-    const [data, setData] = useState('');
     const params = useParams();
     const id = params?.id as string;
-    const [courseID, setCourseID] = useState(id);
+    // const [courseID, setCourseID] = useState(id);
+    const courseID = id
 
     const router = useRouter();
-
-    if (!id || id === '0') {
-        return (<><p>ID not found</p></>);
-    }
 
     useEffect(() => {
         setComponents((prevComponents) => [...prevComponents]); // Ensure components are initialized
@@ -757,7 +731,7 @@ const PageBuilderCanvas = () => {
 
     const [components, setComponents] = useState<ComponentData[]>([]);
     const [isEditMode, setIsEditMode] = useState(true);
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isDragging, setIsDragging] = useState(false);
     const [draggedComponentType, setDraggedComponentType] = useState<ComponentType | null>(null);
@@ -798,34 +772,38 @@ const PageBuilderCanvas = () => {
         e.preventDefault(); // Necessary for drop to work
     };
 
-    // Save and Load functions (using localStorage for simplicity)
-    const savePage = () => {
-        try {
-            const data = JSON.stringify(components);
-            localStorage.setItem('pageData', data);
-            alert('Page saved successfully!');
-        } catch (err) {
-            setError('Failed to save page.');
-        }
-    };
+    if (!id || id === '0') {
+        return (<><p>ID not found</p></>);
+    }
 
-    const loadPage = () => {
-        try {
-            const data = localStorage.getItem('pageData');
-            if (data) {
-                const loadedComponents = JSON.parse(data);
-                // Basic validation of loaded data
-                if (Array.isArray(loadedComponents)) {
-                    // Further validation of individual components can be added here
-                    setComponents(loadedComponents);
-                } else {
-                    setError('Invalid data in localStorage.');
-                }
-            }
-        } catch (err) {
-            setError('Failed to load page.');
-        }
-    };
+    // Save and Load functions (using localStorage for simplicity)
+    // const savePage = () => {
+    //     try {
+    //         const data = JSON.stringify(components);
+    //         localStorage.setItem('pageData', data);
+    //         alert('Page saved successfully!');
+    //     } catch (err) {
+    //         setError('Failed to save page.');
+    //     }
+    // };
+
+    // const loadPage = () => {
+    //     try {
+    //         const data = localStorage.getItem('pageData');
+    //         if (data) {
+    //             const loadedComponents = JSON.parse(data);
+    //             // Basic validation of loaded data
+    //             if (Array.isArray(loadedComponents)) {
+    //                 // Further validation of individual components can be added here
+    //                 setComponents(loadedComponents);
+    //             } else {
+    //                 setError('Invalid data in localStorage.');
+    //             }
+    //         }
+    //     } catch (err) {
+    //         setError(`Failed to load page. ${err}`);
+    //     }
+    // };
 
     const clearPage = () => {
         setComponents([]);
@@ -834,7 +812,9 @@ const PageBuilderCanvas = () => {
 
     const
         exportPage = async () => {
+            
             try {
+                
                 const data = JSON.stringify(
                     components.map((component) => {
                         if (component.type === 'ExerciseChoice') {
@@ -856,8 +836,6 @@ const PageBuilderCanvas = () => {
                     2
                 ); // Pretty print JSON
 
-                setData(data);
-
                 const lessonName = prompt("Please enter the lesson name:");
                 if (!lessonName) {
                     alert("Lesson name is required!");
@@ -872,7 +850,7 @@ const PageBuilderCanvas = () => {
                 }
 
             } catch (err) {
-                setError('Failed to export and add lesson.');
+                setError(`Failed to export and add lesson. ${err}`);
             }
         };
 
@@ -892,8 +870,8 @@ const PageBuilderCanvas = () => {
                         setError('Invalid file content: Expected an array of components.');
                     }
                 }
-            } catch (error: any) {
-                setError(`Error parsing file: ${error.message}`);
+            } catch {
+                setError(`Error parsing file`);
             }
         };
         reader.onerror = () => {
@@ -926,7 +904,7 @@ const PageBuilderCanvas = () => {
                         <button onClick={
                             async () => {
                                 await exportPage();
-                                setModalOpen(true);
+                                // setModalOpen(true);
                             }
                             // exportPage
                         } className="bg-green-500 text-white hover:bg-green-300 cursor-pointer hover:text-green-100 hover:bg-green-600 rounded-md px-4 py-2">Add Lesson</button>
@@ -1010,11 +988,11 @@ const PageBuilderCanvas = () => {
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
                 >
-                    {loading && (
+                    {/* {loading && (
                         <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 bg-black">
                             <div className="text-red text-lg">Loading...</div>
                         </div>
-                    )}
+                    )} */}
 
                     {error && (
                         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 p-4 bg-red-600 text-red rounded-md">
@@ -1110,6 +1088,7 @@ const PageBuilderCanvas = () => {
 };
 
 export default PageBuilderCanvas;
+
 function getCsrfToken() {
     throw new Error('Function not implemented.');
 }

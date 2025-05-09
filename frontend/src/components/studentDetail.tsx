@@ -101,7 +101,7 @@ export default function StudentDetailTable() {
         if (selectedStudent) {
             retrieveUsersEnrolledCourses(selectedStudent);
         }
-    }, [selectedStudent]);
+    }, [selectedStudent, retrieveUsersEnrolledCourses]);
 
     return (
         <div className="flex flex-col my-4">

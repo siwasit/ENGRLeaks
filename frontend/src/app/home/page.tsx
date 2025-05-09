@@ -1,13 +1,13 @@
 //home/page.tsx
+import ParticlesComponent from '@/components/particle';
 import React from 'react';
 import Image from 'next/image';
 import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
 import QuizWrapper from '@/components/landing_page_quiz';
-import CourseFilteringSection from '@/components/course_filtering_section';
-import ParticlesComponent from '@/components/particle';
-import axios from 'axios';
-import { Enrollment } from '../mycourses/page';
+import ClientCourseFilteringWrapper from '@/components/clientCourseFilteringWrapper';
+
+// import CourseFilteringSection from '@/components/course_filtering_section';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -159,7 +159,10 @@ const Home = () => {
                     </h2>
                 </div>
 
-                <CourseFilteringSection></CourseFilteringSection>
+                {/* <CourseFilteringSection/> */}
+                <ClientCourseFilteringWrapper />
+
+                
 
             </div>
         </Layout>

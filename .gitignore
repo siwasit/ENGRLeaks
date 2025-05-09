@@ -37,3 +37,7 @@ backend/logs/
 # Ignore temporary files (e.g., during testing or development)
 frontend/tmp/
 backend/tmp/
+
+docker-compose.yml
+frontend/Dockerfile
+backend/Dockerfile

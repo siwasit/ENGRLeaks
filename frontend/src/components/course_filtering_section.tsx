@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useMemo, useEffect, useState } from 'react';
 import CourseCard from '@/components/course_card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,9 +6,9 @@ import { faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from '@/components/search_bar';
 import axios from 'axios';
 import { Enrollment } from '@/app/mycourses/page';
-import { getUserIdFromToken } from '@/app/profile/page';
 import { useRouter } from 'next/navigation';
 import { getCsrfTokenFromCookies } from '@/utils/getCsrfToken';
+import { getUserIdFromToken } from '@/utils/getUserIdFromToken';
 
 
 type Course = {
@@ -19,7 +18,6 @@ type Course = {
     course_description: string;
     total_lessons: number;
     total_exercises: number;
-    // status: string;
 };
 
 
@@ -81,19 +79,20 @@ type StatusParam = {
 
 
 const CourseFilteringSection = () => {
+    const user_id = getUserIdFromToken();
     const [courses, setCourses] = useState<Course[]>([]);
-    const [isLogin, setIsLogin] = useState(false);
     const router = useRouter()
     
     const [courseStatus, setCourseStatus] = useState<StatusParam[]>([]);
 
-    const csrfToken = getCsrfTokenFromCookies(); // Fetch CSRF token
+    const csrfToken = getCsrfTokenFromCookies();
 
     const handleCourseAction = async (status: string, course_id: number) => {
         const access_token = localStorage.getItem('access_token');
         if (!access_token) {
             console.log('here')
             router.replace('/authenticate')
+            return;
         }
 
         if (status === 'Resume' || status === 'Finished') {
@@ -103,7 +102,7 @@ const CourseFilteringSection = () => {
                 await axios.post(
                     `http://localhost:8000/add_enroll/`,
                     {
-                        user_id: getUserIdFromToken(),
+                        user_id: user_id,
                         course_id: course_id,
                     },
                     {
@@ -118,69 +117,66 @@ const CourseFilteringSection = () => {
                 router.push('/mycourses')
             } catch (error) {
                 console.error("Error enroll course:", error);
-                // // if (error.status == 403)
-                // router.replace('/authenticate');
+                return;
             }
         }
     }
 
-    const retrieveStatusCourseUser = async (): Promise<Enrollment[]> => {
-        const userId = getUserIdFromToken();
+    const retrieveStatusCourseUser = async (user_id: string): Promise<Enrollment[]> => {
         let formattedData: StatusParam[] = [];
-        if (userId) {
-            try {
-                const res = await axios.get(`http://localhost:8000/enrollments/${userId}/`);
-                if (res.status === 200) {
-                    const formatted: Enrollment[] = res.data.enrollments.map((enrollment: any) => ({
-                        user: enrollment.user,
-                        course: enrollment.course,
-                        learned_lesson: enrollment.learned_lesson,
-                        course_id: enrollment.course_id,
-                        user_id: enrollment.user_id
-                    }));
+        if (!user_id) {
+            return [];
+        }
+        try {
+            const res = await axios.get(`http://localhost:8000/enrollments/${user_id}/`);
+            if (res.status === 200) {
+                const formatted: Enrollment[] = res.data.enrollments.map((enrollment: any) => ({
+                    user: enrollment.user,
+                    course: enrollment.course,
+                    learned_lesson: enrollment.learned_lesson,
+                    course_id: enrollment.course_id,
+                    user_id: enrollment.user_id
+                }));
 
-                    for (const e of formatted) {
-                        try {
-                            const res = await axios.get(`http://localhost:8000/courses/${e.course_id}/`);
-                            if (res.status === 200) {
-                                const courseRes = res.data
-                                if (e.course_id) {
-                                    const status = {
-                                        course_id: courseRes.id,
-                                        progress: `${e.learned_lesson.length}/${res.data.total_lessons}`, // Update if real total lessons are available
-                                        status: (e.learned_lesson.length === courseRes.total_lessons) ? 'Finished' : 'Resume'
-                                    };
-                                    formattedData.push(status);
-                                } else {
-                                    const status = {
-                                        course_id: courseRes.id,
-                                        progress: `null`, // Update if real total lessons are available
-                                        status: 'Enroll Now!'
-                                    };
-                                    formattedData.push(status);
-                                }
+                for (const e of formatted) {
+                    try {
+                        const res = await axios.get(`http://localhost:8000/courses/${e.course_id}/`);
+                        if (res.status === 200) {
+                            const courseRes = res.data
+                            if (e.course_id) {
+                                const status = {
+                                    course_id: courseRes.id,
+                                    progress: `${e.learned_lesson.length}/${res.data.total_lessons}`, // Update if real total lessons are available
+                                    status: (e.learned_lesson.length === courseRes.total_lessons) ? 'Finished' : 'Resume'
+                                };
+                                formattedData.push(status);
+                            } else {
+                                const status = {
+                                    course_id: courseRes.id,
+                                    progress: `null`, // Update if real total lessons are available
+                                    status: 'Enroll Now!'
+                                };
+                                formattedData.push(status);
                             }
-                        } catch (error) {
-                            console.error('Error fetching course:', error);
                         }
+                    } catch (error) {
+                        console.error('Error fetching course:', error);
                     }
-                    setCourseStatus(formattedData);
-                    // setEnrollments(formatted);
-                    return formatted;
                 }
-            } catch (error) {
-                console.error('Error fetching enrollments:', error);
+                setCourseStatus(formattedData);
+                // setEnrollments(formatted);
+                return formatted;
             }
-        } else {
-            console.error('Access token not found');
+        } catch (error) {
+            console.error('Error fetching enrollments:', error);
         }
         return [];
     };
 
     useEffect(() => {
-        const access_token = localStorage.getItem('access_token');
+        // const access_token = localStorage.getItem('access_token');
         
-        retrieveStatusCourseUser();
+        retrieveStatusCourseUser(user_id);
         const fetchCourses = async () => {
             try {
                 const res = await axios.get('http://localhost:8000/courses/');
@@ -204,7 +200,7 @@ const CourseFilteringSection = () => {
 
         fetchCourses();
 
-    }, []);
+    }, [user_id]);
 
     const {
         query,
