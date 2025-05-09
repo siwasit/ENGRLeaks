@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'engrleaks-backend']
 
 AUTH_USER_MODEL = 'ENGRBackend.User'
 
@@ -58,12 +58,12 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000', 'http://192.168.75.1:3000', 'https://40b2-203-131-211-114.ngrok-free.app'
+    'http://localhost:3000', 'http://192.168.75.1:3000', 'engrleaks.onrender.com'
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000', 'http://192.168.75.1:3000', 'https://40b2-203-131-211-114.ngrok-free.app'  # Your Next.js frontend URL
+    'http://localhost:3000', 'http://192.168.75.1:3000', 'engrleaks.onrender.com'
 ]
 
 CSRF_COOKIE_HTTPONLY = False
