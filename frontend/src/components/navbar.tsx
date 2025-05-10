@@ -55,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
 
     const getCsrfToken = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/get_csrf/', {
+            const response = await axios.get('http://engrleaks-backend.onrender.com/api/get_csrf/', {
                 withCredentials: true,
             });
 

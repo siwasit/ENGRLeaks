@@ -18,7 +18,7 @@ export default function StudentOverviewTable() {
     const handleDelete = async (studentId: number) => {
         const csrfToken = getCsrfTokenFromCookies(); // Assuming you have a function to get the CSRF token from cookies
         try {
-            await axios.delete(`http://localhost:8000/delete_user/${studentId}/`
+            await axios.delete(`http://engrleaks-backend.onrender.com/delete_user/${studentId}/`
                 , {
                     headers: {
                         "X-CSRFToken": csrfToken,
@@ -35,10 +35,10 @@ export default function StudentOverviewTable() {
 
     const retrieveStudentOverview = async () => {
         try {
-            const res = await fetch("http://localhost:8000/users/");
+            const res = await fetch("http://engrleaks-backend.onrender.com/users/");
             if (res.status === 200) {
                 const data = await res.json();
-                const resCourses = await fetch("http://localhost:8000/enrollments/");
+                const resCourses = await fetch("http://engrleaks-backend.onrender.com/enrollments/");
                 if (resCourses.status === 200) {
                     const enrollmentsData = await resCourses.json();
                     const enrollments = enrollmentsData.enrollments;  // Corrected here

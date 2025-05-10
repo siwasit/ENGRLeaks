@@ -70,7 +70,7 @@ export default function CourseTable() {
             creator_id: userId,
         };
 
-        axios.post("http://localhost:8000/add_course/",
+        axios.post("http://engrleaks-backend.onrender.com/add_course/",
             newCourse,
             {
                 headers: {
@@ -84,7 +84,7 @@ export default function CourseTable() {
 
     const retrieveCourseById = async (courseId: number) => {
         try {
-            const res = await axios.get(`http://localhost:8000/courses/${courseId}/`)
+            const res = await axios.get(`http://engrleaks-backend.onrender.com/courses/${courseId}/`)
             if (res.status === 200) {
                 const resCourseData = res.data;
                 setCourseEditId(resCourseData.id);
@@ -106,7 +106,7 @@ export default function CourseTable() {
         };
 
         try {
-            await axios.post(`http://localhost:8000/update_course/${courseId}/`, updatedCourse, {
+            await axios.post(`http://engrleaks-backend.onrender.com/update_course/${courseId}/`, updatedCourse, {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrfToken,  // Use the fetched CSRF token
@@ -122,7 +122,7 @@ export default function CourseTable() {
     const handleDeleteCourse = async (courseId: number) => {
         const csrfToken = getCsrfTokenFromCookies(); // Fetch CSRF token
         try {
-            await axios.delete(`http://localhost:8000/delete_course/${courseId}/`, {
+            await axios.delete(`http://engrleaks-backend.onrender.com/delete_course/${courseId}/`, {
                 headers: {
                     'X-CSRFToken': csrfToken,  // Use the fetched CSRF token
                 },
@@ -137,11 +137,11 @@ export default function CourseTable() {
     const retrieveCourse = async () => {
         const courseCount: Record<string, number> = {};
         try {
-            const res = await axios.get("http://localhost:8000/courses/")
+            const res = await axios.get("http://engrleaks-backend.onrender.com/courses/")
             if (res.status === 200) {
                 const resCourseData = res.data;
                 try {
-                    const resSum = await axios.get("http://localhost:8000/enrollments/")
+                    const resSum = await axios.get("http://engrleaks-backend.onrender.com/enrollments/")
                     if (res.status === 200) {
                         const resSummaryData = resSum.data;
                         resSummaryData.enrollments.forEach((enrollment: Enrollment) => {

@@ -19,7 +19,7 @@ const addLesson = async (courseId: string, lessonName: string, body: string): Pr
 
   try {
     const response = await axios.post(
-      `http://localhost:8000/add_lesson/${courseId}`,
+      `http://engrleaks-backend.onrender.com/add_lesson/${courseId}`,
       {
         lesson_name: lessonName,
         body: body,

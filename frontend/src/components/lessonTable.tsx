@@ -38,7 +38,7 @@ export default function CourseTable() {
 
     const retrieveCourse = async () => {
         try {
-            const res = await axios.get(`http://localhost:8000/courses/`);
+            const res = await axios.get(`http://engrleaks-backend.onrender.com/courses/`);
             if (res.status === 200) {
                 const coursesData = Array.isArray(res.data) ? res.data : [];
 
@@ -67,7 +67,7 @@ export default function CourseTable() {
     const handleLessonDelete = async (lesson_id: string) => {
         const csrfToken = getCsrfTokenFromCookies();
         try {
-            await axios.delete(`http://localhost:8000/delete_lessons/${lesson_id}`, {
+            await axios.delete(`http://engrleaks-backend.onrender.com/delete_lessons/${lesson_id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrfToken, // Use the fetched CSRF token
@@ -86,7 +86,7 @@ export default function CourseTable() {
 
     const retrieveLessonByCourseId = async (course_id: string) => {
         try {
-            const res = await axios.get(`http://localhost:8000/lessons/course/${course_id}`);
+            const res = await axios.get(`http://engrleaks-backend.onrender.com/lessons/course/${course_id}`);
             if (res.status === 200) {
                 const lessons = res.data.lessons;
 

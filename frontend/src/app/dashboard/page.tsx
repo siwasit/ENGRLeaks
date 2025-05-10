@@ -14,7 +14,7 @@ const retrieveAccount = async (setFullName: React.Dispatch<React.SetStateAction<
     const userId = getUserIdFromToken();
     if (userId) {
         try {
-            const res = await fetch(`http://localhost:8000/users/${userId}/`);
+            const res = await fetch(`http://engrleaks-backend.onrender.com/users/${userId}/`);
             if (res.status === 200) {
                 const userData = await res.json();
                 setFullName(`${userData.name} ${userData.surname}`);

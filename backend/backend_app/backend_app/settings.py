@@ -61,7 +61,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000', 
     'http://192.168.75.1:3000',
     'http://127.0.0.1:3000',
-    'https://yourdomain.onrender.com',
+    'https://engrleaks-frontend.onrender.com'
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 
@@ -69,7 +69,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://192.168.75.1:3000',
     'http://127.0.0.1:3000',
-    'https://yourdomain.onrender.com'
+    'https://engrleaks-frontend.onrender.com'
 ]
 
 CSRF_COOKIE_HTTPONLY = False

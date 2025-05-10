@@ -100,7 +100,7 @@ const CourseFilteringSection = () => {
         } else if (status === 'Enroll Now!') {
             try {
                 await axios.post(
-                    `http://localhost:8000/add_enroll/`,
+                    `http://engrleaks-backend.onrender.com/add_enroll/`,
                     {
                         user_id: user_id,
                         course_id: course_id,
@@ -128,7 +128,7 @@ const CourseFilteringSection = () => {
             return [];
         }
         try {
-            const res = await axios.get(`http://localhost:8000/enrollments/${user_id}/`);
+            const res = await axios.get(`http://engrleaks-backend.onrender.com/enrollments/${user_id}/`);
             if (res.status === 200) {
                 const formatted: Enrollment[] = res.data.enrollments.map((enrollment: any) => ({
                     user: enrollment.user,
@@ -140,7 +140,7 @@ const CourseFilteringSection = () => {
 
                 for (const e of formatted) {
                     try {
-                        const res = await axios.get(`http://localhost:8000/courses/${e.course_id}/`);
+                        const res = await axios.get(`http://engrleaks-backend.onrender.com/courses/${e.course_id}/`);
                         if (res.status === 200) {
                             const courseRes = res.data
                             if (e.course_id) {
@@ -179,7 +179,7 @@ const CourseFilteringSection = () => {
         retrieveStatusCourseUser(user_id);
         const fetchCourses = async () => {
             try {
-                const res = await axios.get('http://localhost:8000/courses/');
+                const res = await axios.get('http://engrleaks-backend.onrender.com/courses/');
                 if (res.status === 200) {
                     const formatted = res.data.map((course: any) => ({
                         course_id: course.id,
