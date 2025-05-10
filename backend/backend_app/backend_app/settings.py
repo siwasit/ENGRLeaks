@@ -58,12 +58,12 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000', 'http://192.168.75.1:3000', 'engrleaks.onrender.com'
+    'http://localhost:3000', 'http://192.168.75.1:3000', 'https://engrleaks.onrender.com'
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000', 'http://192.168.75.1:3000', 'engrleaks.onrender.com'
+    'http://localhost:3000', 'http://192.168.75.1:3000', 'https://engrleaks.onrender.com'
 ]
 
 CSRF_COOKIE_HTTPONLY = False
