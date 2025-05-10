@@ -61,7 +61,8 @@ CORS_ALLOWED_ORIGINS = [
     'https://localhost:3000', 
     'https://192.168.75.1:3000',
     'https://127.0.0.1:3000',
-    'https://engrleaks-frontend.onrender.com'
+    'https://engrleaks-frontend.onrender.com',
+    "https://engrleaks-backend.onrender.com",
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 
@@ -69,7 +70,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://localhost:3000',
     'https://192.168.75.1:3000',
     'https://127.0.0.1:3000',
-    'https://engrleaks-frontend.onrender.com'
+    'https://engrleaks-frontend.onrender.com',
+    "https://engrleaks-backend.onrender.com",
 ]
 
 CSRF_COOKIE_HTTPONLY = False
@@ -176,3 +178,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_COOKIE_DOMAIN = ".onrender.com" 
+SESSION_COOKIE_DOMAIN = ".onrender.com"

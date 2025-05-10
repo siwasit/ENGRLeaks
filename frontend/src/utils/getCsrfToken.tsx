@@ -23,6 +23,7 @@
 export async function getCsrfTokenFromCookies() {
     const response = await fetch(`https://engrleaks-backend.onrender.com/api/get_csrf/`, {
       credentials: 'include',
+      mode: 'cors'
     });
     return await response.json();
   }
