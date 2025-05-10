@@ -112,10 +112,21 @@ export default function MyCoursesPage() {
 
     const handleUnenroll = async (course_id: number) => {
         const csrfToken = getCsrfTokenFromCookies();
+        const user_id = getUserIdFromToken();
+        
+        if (!csrfToken) {
+            console.error('CSRF Token not found.')
+            return;
+        }
+        if (!user_id) {
+            console.error('UID not found.')
+            return;
+        }
+
         try {
             await axios.delete('http://localhost:8000/delete_enroll/', {
                 data: {
-                    user_id: getUserIdFromToken(),
+                    user_id: user_id,
                     course_id: course_id,
                 },
                 headers: {
@@ -132,7 +143,7 @@ export default function MyCoursesPage() {
 
     useEffect(() => {
         retrieveCourseData();
-    }, [retrieveCourseData]);
+    }, []);
 
     return (
         <div className="relative min-h-screen flex flex-col" style={{ background: 'linear-gradient(to bottom right, #FFCB91, #FE7474)' }}>

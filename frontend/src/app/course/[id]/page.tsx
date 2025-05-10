@@ -4,7 +4,7 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import ParticlesComponent from "@/components/particle";
 import CourseHeader from "@/templates/courseHeader";
-import CourseImage from "@/templates/image";
+import CourseImage from "@/templates/image_component";
 import MultipleChoiceExercise from "@/templates/multipleChoiceExercise";
 import Paragraph from "@/templates/paragraph";
 import RunTimeIDE from "@/templates/runtimeIDE";
@@ -59,7 +59,7 @@ export default function CoursePage() {
     useEffect(() => {
         retrieveAllLesson();
         retrieveCourseName();
-    }, [course_id, retrieveAllLesson, retrieveCourseName])
+    }, [course_id])
 
     if (!course_id || course_id === '0') {
         return (<><p>ID not found</p></>);
@@ -178,7 +178,7 @@ export default function CoursePage() {
                                             {item.type === "CourseHeader" && <CourseHeader title={item.title} teacher_name={item.lecturer} />}
                                             {item.type === "IDERuntimeTutorial" && <RunTimeIDE initialCode={item.content} title="Tutorial" />}
                                             {item.type === "IDERuntimeExercise" && <RunTimeExercise initialCode={item.content} title="Exercise" instructions="Write an HTML heading that says 'Welcome to the IDE!' using an <h1> tag." expectedOutput="<h1>Welcome to the IDE!</h1>" />}
-                                            {item.type === "Image" && <CourseImage imageUrl={item.src ?? ""} imageDescription={item.content} />}
+                                            {item.type === "Image" && <CourseImage imageUrl={item.src ?? ""} imageDescription={item.content} width={item.width} height={item.height}/>}
                                             {item.type === "ExerciseChoice" && <MultipleChoiceExercise text={item.question} options={item.choices} correctIndex={item.correctChoice - 1} />}
                                             {/* Add more conditions for other types */}
                                         </div>

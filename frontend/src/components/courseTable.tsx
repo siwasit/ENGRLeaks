@@ -192,8 +192,7 @@ export default function CourseTable() {
 
     useEffect(() => {
         retrieveCourse()
-        // retrieveCourseSummary()
-    }, [retrieveCourse])
+    }, [])
 
     return (
         <div className="flex flex-col my-4">

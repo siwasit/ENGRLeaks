@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import '../app/authenticate/style.css';
+import { apiFetch } from '@/utils/api';
 
 export default function AuthenticationSection() {
     const [emailRegister, setEmailRegister] = useState('');
@@ -18,7 +19,7 @@ export default function AuthenticationSection() {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [role, setRole] = useState('');
-    
+
     const router = useRouter();
 
     const [previousPage, setPreviousPage] = useState('login');
@@ -71,14 +72,27 @@ export default function AuthenticationSection() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:8000/api/token/', {
-                email: emailLogin,
-                password: passwordLogin,
+            // const res = await axios.post('http://localhost:8000/api/token/', {
+            //     email: emailLogin,
+            //     password: passwordLogin,
+            // });
+
+            const res = await apiFetch('/api/token/', {
+                method: 'POST',
+                data: {
+                    email: emailLogin,
+                    password: passwordLogin,
+                }
             });
 
+            console.log(res);
+
+            const responseData = await res.json();
+            console.log(responseData);
+
             if (res.status === 200) {
-                localStorage.setItem('access_token', res.data.access);
-                localStorage.setItem('refresh_token', res.data.refresh);
+                localStorage.setItem('access_token', responseData.access);
+                localStorage.setItem('refresh_token', responseData.refresh);
                 // router.push('/home'); // Redirect on success
                 window.location.href = '/home';
             }
@@ -94,15 +108,19 @@ export default function AuthenticationSection() {
                 }
             } else {
                 setError('Network error. Please try again later.');
-                // router.push('/home'); //! Remove this line when the backend is ready
-                // window.location.href = '/home';
             }
         }
     };
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-
+    
+        // Check password match first
+        if (passwordRegister !== confirmPasswordRegister) {
+            alert('Passwords do not match. Please ensure both password fields are the same.');
+            return; // Exit early
+        }
+    
         const userData = {
             email: emailRegister,
             account_name: accountName,
@@ -112,31 +130,31 @@ export default function AuthenticationSection() {
             password: passwordRegister,
             confirm_password: confirmPasswordRegister,
         };
-
-        //* Function to check if passwords match
-        if (passwordRegister !== confirmPasswordRegister) {
-            e.preventDefault();
-            alert('Passwords do not match. Please ensure both password fields are the same.');
-        }
-
+    
         try {
-            const response = await fetch('http://localhost:8000/api/register/', {
+            const response = await apiFetch('/api/register/', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userData),
+                // Removed duplicate Content-Type header
+                data: userData,
             });
-
+    
+            const responseData = await response.json();
+            
             if (response.ok) {
                 alert(`${accountName} registered successfully`);
-                selectTab('login', true); // Switch to login tab after successful registration
-            } else {
-                const errorData = await response.json();
-                console.error('Registration failed:', errorData);
+                selectTab('login', true);
             }
-        } catch (error) {
-            console.error('Error registering user:', error);
+        } catch (error: any) {
+            // Handle validation errors (400 status)
+            if (error.status === 400) {
+                const errorMessages = Object.values(error)
+                    .flat()
+                    .join('\n');
+                alert(`Registration failed:\n${errorMessages}`);
+            } else {
+                console.error('Registration error:', error);
+                alert('Registration failed. Please try again.');
+            }
         }
     };
 
@@ -158,132 +176,132 @@ export default function AuthenticationSection() {
 
     return (
         <>
-        <div className="form-wrapper">
+            <div className="form-wrapper">
 
-<div className="loginForm">
-    <form id="loginFormElement" onSubmit={handleLogin}>
-        {/* <h1 className='text-[2.5rem] font-bold'>ENGRLeaks</h1> */}
-        <div className="flex justify-center items-center">
-            <Image
-                src="/images/logo_red.png"
-                alt="Logo"
-                width={283} // Adjust width as needed
-                height={80} // Adjust height as needed
-            />
-        </div>
-        <div className="input-box">
-            <input type="email" placeholder="Email" id="email" value={emailLogin} onChange={(e) => setEmailLogin(e.target.value)} required />
-        </div>
-        <div className="input-box">
-            <input type="password" id="password" value={passwordLogin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPasswordLogin(e.target.value)} placeholder="Password" required />
-        </div>
-        <br />
-        <button type="submit" style={{ display: 'none' }}></button>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-    </form>
-</div>
+                <div className="loginForm">
+                    <form id="loginFormElement" onSubmit={handleLogin}>
+                        {/* <h1 className='text-[2.5rem] font-bold'>ENGRLeaks</h1> */}
+                        <div className="flex justify-center items-center">
+                            <Image
+                                src="/images/logo_red.png"
+                                alt="Logo"
+                                width={283} // Adjust width as needed
+                                height={80} // Adjust height as needed
+                            />
+                        </div>
+                        <div className="input-box">
+                            <input type="email" placeholder="Email" id="email" value={emailLogin} onChange={(e) => setEmailLogin(e.target.value)} required />
+                        </div>
+                        <div className="input-box">
+                            <input type="password" id="password" value={passwordLogin} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPasswordLogin(e.target.value)} placeholder="Password" required />
+                        </div>
+                        <br />
+                        <button type="submit" style={{ display: 'none' }}></button>
+                        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                    </form>
+                </div>
 
-<div className="registrationForm">
-    <div className="flex justify-center items-center">
+                <div className="registrationForm">
+                    <div className="flex justify-center items-center">
 
-    </div>
-    <form id="registerFormElement" onSubmit={handleRegister}>
-        {/* <h1 className='text-[2.5rem] font-bold'>ENGRLeaks</h1> */}
-        <div className="flex justify-center items-center">
-            <Image
-                src="/images/logo_red.png"
-                alt="Logo"
-                width={283} // Adjust width as needed
-                height={80} // Adjust height as needed
-            />
-        </div>
-        <div>
+                    </div>
+                    <form id="registerFormElement" onSubmit={handleRegister}>
+                        {/* <h1 className='text-[2.5rem] font-bold'>ENGRLeaks</h1> */}
+                        <div className="flex justify-center items-center">
+                            <Image
+                                src="/images/logo_red.png"
+                                alt="Logo"
+                                width={283} // Adjust width as needed
+                                height={80} // Adjust height as needed
+                            />
+                        </div>
+                        <div>
 
-        </div>
-        <div className="input-box">
-            <input type="email" value={emailRegister} onChange={(e) => setEmailRegister(e.target.value)} placeholder="Email" required />
-        </div>
-        <div className="input-box">
-            <input type="password" value={passwordRegister} onChange={(e) => setPasswordRegister(e.target.value)} placeholder="Password" required />
-        </div>
-        <div className="input-box">
-            <input
-                type="password"
-                id="confirmPassword"
-                value={confirmPasswordRegister}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPasswordRegister(e.target.value)}
-                placeholder="Confirm Password"
-                required
-            />
-        </div>
-        <div className="input-box">
-            <input type="text" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Account name" required />
-        </div>
-        <div className="row-container">
-            <div className="input-box">
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" required />
-            </div>
-            <div className="input-box" id="surname-box">
-                <input type="text" value={surname} onChange={(e) => setSurname(e.target.value)} placeholder="Surname" required />
-            </div>
-        </div>
-        <div className="input-box">
-            <select
-                id="role"
-                value={role}
-                onChange={(e) => {
-                    setRole(e.target.value);
-                    const selectedRole = document.getElementById('role') as HTMLSelectElement;
-                    if (selectedRole?.value === "") {
-                        selectedRole.classList.add('placeholder');
-                    } else {
-                        selectedRole.classList.remove('placeholder');
-                    }
-                }}
-                name="role"
-                required
-                style={{ outline: '1px solid #851515' }}
-            >
-                <option value="">Role</option>
-                <option value="student">Student</option>
-                <option value="lecturer">Lecturer</option>
-            </select>
-        </div>
-        <label className="tos-label">
-            <input type="checkbox" id="tos-checkbox" required />
-            <span className="checkmark"></span>
-            <span className="tos-text">
-                By checking this box, you agree to our{' '}
-                <a href="#" target="_blank">terms of service</a>
-            </span>
-        </label>
-        <button type="submit" style={{ display: 'none' }}></button>
-    </form>
-</div>
-<br />
-<a href=""></a>
-<div className="toggle-btn-container">
-    <div className="slider" id="slider"></div>
-    <button
-        className={`toggle-btn ${previousPage === 'register' ? 'active' : ''}`}
-        onClick={() => {
-            setPreviousPage('register');
-            selectTab('register');
-        }}
-        id="registerBtn"
-    >
-        Register
-    </button>
-    <button
-        className={`toggle-btn ${previousPage === 'login' ? 'active' : ''}`}
-        onClick={() => {
-            setPreviousPage('login');
-            selectTab('login');
-        }}
-        id="loginBtn"
-    >
-        Login
-    </button></div>
-</div></>
+                        </div>
+                        <div className="input-box">
+                            <input type="email" value={emailRegister} onChange={(e) => setEmailRegister(e.target.value)} placeholder="Email" required />
+                        </div>
+                        <div className="input-box">
+                            <input type="password" value={passwordRegister} onChange={(e) => setPasswordRegister(e.target.value)} placeholder="Password" required />
+                        </div>
+                        <div className="input-box">
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                value={confirmPasswordRegister}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPasswordRegister(e.target.value)}
+                                placeholder="Confirm Password"
+                                required
+                            />
+                        </div>
+                        <div className="input-box">
+                            <input type="text" value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Account name" required />
+                        </div>
+                        <div className="row-container">
+                            <div className="input-box">
+                                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" required />
+                            </div>
+                            <div className="input-box" id="surname-box">
+                                <input type="text" value={surname} onChange={(e) => setSurname(e.target.value)} placeholder="Surname" required />
+                            </div>
+                        </div>
+                        <div className="input-box">
+                            <select
+                                id="role"
+                                value={role}
+                                onChange={(e) => {
+                                    setRole(e.target.value);
+                                    const selectedRole = document.getElementById('role') as HTMLSelectElement;
+                                    if (selectedRole?.value === "") {
+                                        selectedRole.classList.add('placeholder');
+                                    } else {
+                                        selectedRole.classList.remove('placeholder');
+                                    }
+                                }}
+                                name="role"
+                                required
+                                style={{ outline: '1px solid #851515' }}
+                            >
+                                <option value="">Role</option>
+                                <option value="student">Student</option>
+                                <option value="lecturer">Lecturer</option>
+                            </select>
+                        </div>
+                        <label className="tos-label">
+                            <input type="checkbox" id="tos-checkbox" required />
+                            <span className="checkmark"></span>
+                            <span className="tos-text">
+                                By checking this box, you agree to our{' '}
+                                <a href="#" target="_blank">terms of service</a>
+                            </span>
+                        </label>
+                        <button type="submit" style={{ display: 'none' }}></button>
+                    </form>
+                </div>
+                <br />
+                <a href=""></a>
+                <div className="toggle-btn-container">
+                    <div className="slider" id="slider"></div>
+                    <button
+                        className={`toggle-btn ${previousPage === 'register' ? 'active' : ''}`}
+                        onClick={() => {
+                            setPreviousPage('register');
+                            selectTab('register');
+                        }}
+                        id="registerBtn"
+                    >
+                        Register
+                    </button>
+                    <button
+                        className={`toggle-btn ${previousPage === 'login' ? 'active' : ''}`}
+                        onClick={() => {
+                            setPreviousPage('login');
+                            selectTab('login');
+                        }}
+                        id="loginBtn"
+                    >
+                        Login
+                    </button></div>
+            </div></>
     );
 }

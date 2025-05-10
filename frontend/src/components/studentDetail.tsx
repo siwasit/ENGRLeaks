@@ -1,33 +1,35 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+type EnrollmentTableParameters = {
+    id: number
+    title: string;
+    progress: string;
+    enrollDate: string;
+    status: string;
+};
+
+interface Course {
+    id: number;
+    course_name: string;
+    total_lessons: number;
+}
+
+interface Enrollment {
+    id: number;
+    course_id: string;
+    course__course_name: string;
+    total_lesson: number;
+    learned_lesson: number;
+}
+
 export default function StudentDetailTable() {
 
     const [selectedStudent, setSelectedStudent] = useState("");
     const [users, setUsers] = useState<{ id: number; email: string; account_name: string; name: string; surname: string; role: string; created_at: string }[]>([]);
     const [enrolledCourses, setEnrolledCourses] = useState<EnrollmentTableParameters[]>([]);
 
-    type EnrollmentTableParameters = {
-        id: number
-        title: string;
-        progress: string;
-        enrollDate: string;
-        status: string;
-    };
-
-    interface Course {
-        id: number;
-        course_name: string;
-        total_lessons: number;
-    }
-
-    interface Enrollment {
-        id: number;
-        course_id: string;
-        course__course_name: string;
-        total_lesson: number;
-        learned_lesson: number;
-    }
+    
 
     const retrieveUsers = async () => {
         try {
@@ -100,7 +102,7 @@ export default function StudentDetailTable() {
         if (selectedStudent) {
             retrieveUsersEnrolledCourses(selectedStudent);
         }
-    }, [selectedStudent, retrieveUsersEnrolledCourses]);
+    }, [selectedStudent]);
 
     return (
         <div className="flex flex-col my-4">

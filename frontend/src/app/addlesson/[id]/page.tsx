@@ -3,7 +3,7 @@
 import React from 'react';
 import PageBuilderCanvas from './PageBuilderCanvas';
 
-const Page = ({ params }: { params: { id: string } }) => {
+const Page = () => {
   return <PageBuilderCanvas />;
 };
 

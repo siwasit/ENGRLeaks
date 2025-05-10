@@ -1,18 +1,20 @@
 export const getCsrfTokenFromCookies = () => {
     if (typeof window === 'undefined') {
-        return null; // We're in a non-browser environment (e.g., SSR)
+        console.log('getCsrfTokenFromCookies: Not in a browser environment');
+        return null;
     }
 
-    const cookieName = 'csrftoken=';
     const cookies = document.cookie.split(';');
+    const cookieName = 'csrftoken';
 
-    for (let cookie of cookies) {
-        while (cookie.startsWith(' ')) {
-            cookie = cookie.substring(1);
-        }
-        if (cookie.startsWith(cookieName)) {
-            return cookie.substring(cookieName.length);
+    for (const cookie of cookies) {
+        const [key, value] = cookie.trim().split('=');
+        if (key === cookieName) {
+            console.log(`CSRF token found: ${value}`);
+            return value;
         }
     }
+
+    console.log('CSRF token not found in cookies');
     return null;
 };

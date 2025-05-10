@@ -2,14 +2,16 @@ import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+interface Student {
+    id: number;
+    name: string;
+    surname: string;
+    email: string;
+    courses: string;
+}
+
 export default function StudentOverviewTable() {
-    interface Student {
-        id: number;
-        name: string;
-        surname: string;
-        email: string;
-        courses: string;
-    }
+    
 
     const [studentOverview, setStudentOverview] = useState<Student[]>([]);
 
@@ -64,7 +66,7 @@ export default function StudentOverviewTable() {
 
     useEffect(() => {
         retrieveStudentOverview();
-    }, [retrieveStudentOverview]);
+    }, []);
 
 
     return (

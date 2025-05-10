@@ -9,8 +9,10 @@ export default function Authenticate() {
             <div className="container">
                 <div className="nebula-img-container">
                     <Image
-                        src="https://freenaturestock.com/wp-content/uploads/freenaturestock-1719-1024x683.jpg"
+                        src="/images/maple.jpg"
                         alt=""
+                        height={100}
+                        width={200}
                     />
                     {/* Added position: relative here */}
                     <div className="z-[-10] relative w-[200px] h-[300px] overflow-hidden">

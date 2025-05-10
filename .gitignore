@@ -15,6 +15,7 @@ backend/*.pyc
 # Ignore .env and local environment variables
 frontend/.env
 backend/.env
+frontend/.env.local
 
 # Ignore IDE/editor files
 .vscode/
