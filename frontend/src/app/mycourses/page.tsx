@@ -59,7 +59,7 @@ export default function MyCoursesPage() {
         const userId = getUserIdFromToken();
         if (userId) {
             try {
-                const res = await axios.get(`http://engrleaks-backend.onrender.com/enrollments/${userId}/`);
+                const res = await axios.get(`https://engrleaks-backend.onrender.com/enrollments/${userId}/`);
                 if (res.status === 200) {
                     const formatted: Enrollment[] = res.data.enrollments.map((enrollment: any) => ({
                         user: enrollment.user,
@@ -87,7 +87,7 @@ export default function MyCoursesPage() {
 
         for (const enr of fetchedEnrollments) {
             try {
-                const res = await axios.get(`http://engrleaks-backend.onrender.com/courses/${enr.course_id}/`);
+                const res = await axios.get(`https://engrleaks-backend.onrender.com/courses/${enr.course_id}/`);
                 if (res.status === 200) {
                     const rawDate = res.data.created_at;
                     const formattedDate = new Date(rawDate).toLocaleDateString('en-GB');
@@ -124,7 +124,7 @@ export default function MyCoursesPage() {
         }
 
         try {
-            await axios.delete('http://engrleaks-backend.onrender.com/delete_enroll/', {
+            await axios.delete('https://engrleaks-backend.onrender.com/delete_enroll/', {
                 data: {
                     user_id: user_id,
                     course_id: course_id,

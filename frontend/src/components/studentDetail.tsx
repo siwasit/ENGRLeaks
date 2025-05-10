@@ -33,7 +33,7 @@ export default function StudentDetailTable() {
 
     const retrieveUsers = async () => {
         try {
-            const res = await axios.get("http://engrleaks-backend.onrender.com/users/");
+            const res = await axios.get("https://engrleaks-backend.onrender.com/users/");
             if (res.status === 200) {
                 const usersData = res.data.users;
 
@@ -62,12 +62,12 @@ export default function StudentDetailTable() {
         let formattedData: EnrollmentTableParameters[] = [];
         let idx = 1;
         try {
-            const res = await axios.get(`http://engrleaks-backend.onrender.com/enrollments/${studentId}/`);
+            const res = await axios.get(`https://engrleaks-backend.onrender.com/enrollments/${studentId}/`);
             if (res.status === 200) {
                 const enrollments = res.data.enrollments;
                 for (const e of enrollments) {
                     try {
-                        const courseRes = await axios.get(`http://engrleaks-backend.onrender.com/courses/${e.course_id}/`);
+                        const courseRes = await axios.get(`https://engrleaks-backend.onrender.com/courses/${e.course_id}/`);
                         if (courseRes.status === 200) {
                             const rawDate = courseRes.data.created_at;
                             const formattedDate = new Date(rawDate).toLocaleDateString('en-GB');

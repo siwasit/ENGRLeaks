@@ -29,7 +29,7 @@ export default function CoursePage() {
 
     const retrieveAllLesson = async () => {
         try {
-            const lessonsRes = await axios.get(`http://engrleaks-backend.onrender.com/lessons/course/${course_id}`);
+            const lessonsRes = await axios.get(`https://engrleaks-backend.onrender.com/lessons/course/${course_id}`);
             if (lessonsRes.status === 200) {
                 const lessonsData = lessonsRes.data.lessons.map((lesson: Lesson) => {
                     return {
@@ -47,7 +47,7 @@ export default function CoursePage() {
 
     const retrieveCourseName = async () => {
         try {
-            const resCourseName = await axios.get(`http://engrleaks-backend.onrender.com/courses/${course_id}/`)
+            const resCourseName = await axios.get(`https://engrleaks-backend.onrender.com/courses/${course_id}/`)
             if (resCourseName.status === 200) {
                 setCourseName(resCourseName.data.course_name)
             }
@@ -90,7 +90,7 @@ export default function CoursePage() {
                             {/* <span className="relative flex items-center justify-center h-10 w-10 hover:cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
                                 {isOpen ? (
                                     <svg
-                                        xmlns="http://www.w3.org/2000/svg"
+                                        xmlns="https://www.w3.org/2000/svg"
                                         className="h-6 w-6 ml-2 transform transition-transform duration-300 rotate-180"
                                         fill="none"
                                         viewBox="0 0 24 24"
@@ -102,7 +102,7 @@ export default function CoursePage() {
                                     </svg>
                                 ) : (
                                     <svg
-                                        xmlns="http://www.w3.org/2000/svg"
+                                        xmlns="https://www.w3.org/2000/svg"
                                         className="h-6 w-6 ml-2 transform transition-transform duration-300 rotate-0"
                                         fill="none"
                                         viewBox="0 0 24 24"

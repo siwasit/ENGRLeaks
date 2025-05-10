@@ -33,4 +33,25 @@ const nextConfig = {
 };
 
 // module.exports = nextConfig;
-module.exports = nextConfig
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://engrleaks-backend.onrender.com/api/:path*',
+      },
+    ]
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Allow-Origin', value: 'https://engrleaks-frontend.onrender.com' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT' },
+        ],
+      },
+    ]
+  }
+}

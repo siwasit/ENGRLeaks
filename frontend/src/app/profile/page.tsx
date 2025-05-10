@@ -23,7 +23,7 @@ export default function ProfilePage() {
         const userId = getUserIdFromToken();
         if (userId) {
             try {
-                const res = await axios.get(`http://engrleaks-backend.onrender.com/users/${userId}/`)
+                const res = await axios.get(`https://engrleaks-backend.onrender.com/users/${userId}/`)
                 if (res.status === 200) {
                     const userData = res.data;
                     setAccountName(userData.account_name);
@@ -44,7 +44,7 @@ export default function ProfilePage() {
         const userId = getUserIdFromToken();
         if (userId) {
             try {
-                const res = await axios.get(`http://engrleaks-backend.onrender.com/enrollments/${userId}/`)
+                const res = await axios.get(`https://engrleaks-backend.onrender.com/enrollments/${userId}/`)
                 if (res.status === 200) {
                     const userCourseData = res.data;
                     const courses = userCourseData.enrollments.map((course: any) => course.course);
@@ -70,7 +70,7 @@ export default function ProfilePage() {
         if (userId) {
             try {
                 const response = await axios.post(
-                    `http://engrleaks-backend.onrender.com/api/update_user/${userId}/`,
+                    `https://engrleaks-backend.onrender.com/api/update_user/${userId}/`,
                     {
                         account_name: accountName,
                         name: name,

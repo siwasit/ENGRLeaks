@@ -93,7 +93,7 @@ const Home = () => {
                 </p>
 
                 <div className="absolute top-100 left-1/2 transform -translate-x-1/2 w-20 h-20 animate-bounce">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={4} fill="none" stroke="url(#grad1)">
+                    <svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={4} fill="none" stroke="url(#grad1)">
                         <defs>
                             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
                                 <stop offset="0%" stopColor="#FE7474" />
@@ -102,7 +102,7 @@ const Home = () => {
                         </defs>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={4} fill="none" stroke="url(#grad1)" className='absolute top-8'>
+                    <svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={4} fill="none" stroke="url(#grad1)" className='absolute top-8'>
                         <defs>
                             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
                                 <stop offset="0%" stopColor="#FE7474" />

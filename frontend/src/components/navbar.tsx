@@ -39,7 +39,7 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
         }
 
         try {
-            const res = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+            const res = await axios.post('https://127.0.0.1:8000/api/token/refresh/', {
                 refresh: refresh_token,
             });
 
@@ -55,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
 
     const getCsrfToken = async () => {
         try {
-            const response = await axios.get('http://engrleaks-backend.onrender.com/api/get_csrf/', {
+            const response = await axios.get('https://engrleaks-backend.onrender.com/api/get_csrf/', {
                 withCredentials: true,
             });
 
