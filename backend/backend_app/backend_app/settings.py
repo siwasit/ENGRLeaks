@@ -57,7 +57,6 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CSRF_COOKIE_HTTPONLY = False
-CORS_ALLOW_CREDENTIALS = True
 
 # Allow specific headers, including CSRF token
 CORS_ALLOW_HEADERS = [
@@ -152,7 +151,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # SECURE_SSL_REDIRECT = True
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 ALLOWED_HOSTS = [
     'localhost', 
@@ -160,6 +158,8 @@ ALLOWED_HOSTS = [
     'engrleaks-backend.onrender.com',
     'engrleaks-frontend.onrender.com'
 ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 #* Debug settings
 # DEBUG = True
@@ -177,4 +177,5 @@ SESSION_COOKIE_DOMAIN = ".onrender.com"
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'    
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 print("Using production settings")
