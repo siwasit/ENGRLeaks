@@ -1,4 +1,4 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://engrleaks-backend.onrender.com';
 
 export const API = {
   csrfToken: `${API_BASE_URL}/api/get_csrf/`,

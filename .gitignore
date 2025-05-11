@@ -13,7 +13,7 @@ backend/__pycache__/
 backend/*.pyc
 
 # Ignore .env and local environment variables
-frontend/.env
+# frontend/.env
 backend/.env
 
 # Ignore IDE/editor files

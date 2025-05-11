@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useState } from 'react';
+import { API } from '@/utils/api';
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -28,7 +29,8 @@ export default function RegisterForm() {
     };
   
     try {
-      const response = await fetch('https://localhost:8000/api/register/', {
+      // api/register/
+      const response = await fetch(API.register, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

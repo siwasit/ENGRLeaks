@@ -40,7 +40,8 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
         }
 
         try {
-            const res = await axios.post('https://localhost:8000/api/token/refresh/', {
+            // /api/token/refresh/
+            const res = await axios.post(API.refreshToken, {
                 refresh: refresh_token,
             });
 
