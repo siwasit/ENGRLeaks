@@ -68,7 +68,7 @@ CORS_ALLOWED_ORIGINS = [
     'https://engrleaks-backend.onrender.com',
     "http://localhost:8000",
 ]
-CORS_ALLOW_ALL_ORIGINS = TRUE
+CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
