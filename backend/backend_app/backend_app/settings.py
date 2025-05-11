@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'engrleaks-backend.onrender.com', 'engrleaks-frontend.onrender.com']
+ALLOWED_HOSTS = ['localhost', 'localhost', 'engrleaks-backend.onrender.com', 'engrleaks-frontend.onrender.com']
 
 AUTH_USER_MODEL = 'ENGRBackend.User'
 
@@ -58,20 +58,22 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://localhost:3000', 
+    'http://localhost:3000', 
     'https://192.168.75.1:3000',
-    'https://127.0.0.1:3000',
+    'http://localhost:3000',
     'https://engrleaks-frontend.onrender.com',
-    "https://engrleaks-backend.onrender.com",
+    'https://engrleaks-backend.onrender.com',
+    "http://localhost:8000",
 ]
 CORS_ALLOW_ALL_ORIGINS = False
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://localhost:3000',
+    'http://localhost:3000',
     'https://192.168.75.1:3000',
-    'https://127.0.0.1:3000',
+    'http://localhost:3000',
     'https://engrleaks-frontend.onrender.com',
-    "https://engrleaks-backend.onrender.com",
+    'https://engrleaks-backend.onrender.com',
+    "http://localhost:8000",   
 ]
 
 CSRF_COOKIE_HTTPONLY = False

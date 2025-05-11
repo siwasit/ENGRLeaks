@@ -1,12 +1,12 @@
 //authentication_section.tsx
 'use client';
 
-import axios from 'axios';
+import { API } from '@/utils/api';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import '../app/authenticate/style.css';
-import { apiFetch } from '@/utils/api';
+import { apiFetch } from '@/utils/apiFetcher';
 
 export default function AuthenticationSection() {
     const [emailRegister, setEmailRegister] = useState('');
@@ -32,23 +32,23 @@ export default function AuthenticationSection() {
         const registerBtn = document.getElementById("registerBtn") as HTMLElement;
 
         if (!skipValidation) {
-            console.log(`Validating form for tab: ${tab}, previousPage: ${previousPage}`);
+            //(`Validating form for tab: ${tab}, previousPage: ${previousPage}`);
             if (tab === 'register' && previousPage === 'register') {
-                console.log('Checking validity for registration form...');
+                //('Checking validity for registration form...');
                 if (!registrationFormElement.checkValidity()) {
-                    console.log('Registration form is invalid.');
+                    //('Registration form is invalid.');
                     registrationFormElement.reportValidity();
                 } else {
-                    console.log('Registration form is valid. Submitting...');
+                    //('Registration form is valid. Submitting...');
                     (registrationFormElement.querySelector('button[type="submit"]') as HTMLButtonElement)?.click();
                 }
             } else if (tab === 'login' && previousPage === 'login') {
-                console.log('Checking validity for login form...');
+                //('Checking validity for login form...');
                 if (!loginFormElement.checkValidity()) {
-                    console.log('Login form is invalid.');
+                    //('Login form is invalid.');
                     loginFormElement.reportValidity();
                 } else {
-                    console.log('Login form is valid. Submitting...');
+                    //('Login form is valid. Submitting...');
                     (loginFormElement.querySelector('button[type="submit"]') as HTMLButtonElement)?.click();
                 }
             }
@@ -72,12 +72,7 @@ export default function AuthenticationSection() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            // const res = await axios.post('https://engrleaks-backend.onrender.com/api/token/', {
-            //     email: emailLogin,
-            //     password: passwordLogin,
-            // });
-
-            const res = await apiFetch('/api/token/', {
+            const res = await apiFetch(API.token, {
                 method: 'POST',
                 data: {
                     email: emailLogin,
@@ -85,10 +80,8 @@ export default function AuthenticationSection() {
                 }
             });
 
-            console.log(res);
-
             const responseData = await res.json();
-            console.log(responseData);
+            //(responseData);
 
             if (res.status === 200) {
                 localStorage.setItem('access_token', responseData.access);
@@ -132,29 +125,24 @@ export default function AuthenticationSection() {
         };
     
         try {
-            const response = await apiFetch('/api/register/', {
+            // /api/register/
+            const response = await fetch(API.register, {
                 method: 'POST',
-                // Removed duplicate Content-Type header
-                data: userData,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
             });
-    
-            const responseData = await response.json();
-            
+
             if (response.ok) {
                 alert(`${accountName} registered successfully`);
-                selectTab('login', true);
-            }
-        } catch (error: any) {
-            // Handle validation errors (400 status)
-            if (error.status === 400) {
-                const errorMessages = Object.values(error)
-                    .flat()
-                    .join('\n');
-                alert(`Registration failed:\n${errorMessages}`);
+                selectTab('login', true); // Switch to login tab after successful registration
             } else {
-                console.error('Registration error:', error);
-                alert('Registration failed. Please try again.');
+                const errorData = await response.json();
+                console.error('Registration failed:', errorData);
             }
+        } catch (error) {
+            console.error('Error registering user:', error);
         }
     };
 

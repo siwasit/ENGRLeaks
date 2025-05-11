@@ -8,6 +8,7 @@ import ParticlesComponent from "@/components/particle";
 import axios from "axios";
 import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
 import { getUserIdFromToken } from "@/utils/getUserIdFromToken";
+import { API } from "@/utils/api";
 
 export default function ProfilePage() {
     const [accountName, setAccountName] = useState("");
@@ -23,7 +24,8 @@ export default function ProfilePage() {
         const userId = getUserIdFromToken();
         if (userId) {
             try {
-                const res = await axios.get(`https://engrleaks-backend.onrender.com/users/${userId}/`)
+                // users/${userId}
+                const res = await axios.get(API.userById(userId));
                 if (res.status === 200) {
                     const userData = res.data;
                     setAccountName(userData.account_name);
@@ -44,7 +46,8 @@ export default function ProfilePage() {
         const userId = getUserIdFromToken();
         if (userId) {
             try {
-                const res = await axios.get(`https://engrleaks-backend.onrender.com/enrollments/${userId}/`)
+                // enrollments/${userId}
+                const res = await axios.get(API.enrollmentByUserId(userId));
                 if (res.status === 200) {
                     const userCourseData = res.data;
                     const courses = userCourseData.enrollments.map((course: any) => course.course);
@@ -60,7 +63,7 @@ export default function ProfilePage() {
     const handleChangeSubmit = async () => {
         const userId = getUserIdFromToken();
         const csrfToken = getCsrfTokenFromCookies(); // Fetch CSRF token
-        console.log('CSRF Token:', csrfToken); // Log the CSRF token for debugging
+        //('CSRF Token:', csrfToken); // Log the CSRF token for debugging
 
         if (!csrfToken) {
             alert('CSRF token not found. Please refresh the page.');
@@ -69,8 +72,9 @@ export default function ProfilePage() {
 
         if (userId) {
             try {
-                const response = await axios.post(
-                    `https://engrleaks-backend.onrender.com/api/update_user/${userId}/`,
+                await axios.post(
+                    // api/update_user/${userId}/
+                    API.updateUser(userId),
                     {
                         account_name: accountName,
                         name: name,
@@ -86,7 +90,7 @@ export default function ProfilePage() {
                         withCredentials: true,  // Include cookies in the request
                     }
                 );
-                console.log('Profile updated successfully:', response.data);
+                //('Profile updated successfully:', response.data);
                 alert('Profile updated successfully!');
             } catch (error) {
                 console.error('Error updating user profile:', (error as any).response?.data ?? (error as any).message);

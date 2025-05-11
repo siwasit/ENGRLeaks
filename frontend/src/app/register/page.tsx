@@ -28,7 +28,7 @@ export default function RegisterForm() {
     };
   
     try {
-      const response = await fetch('https://127.0.0.1:8000/api/register/', {
+      const response = await fetch('https://localhost:8000/api/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export default function RegisterForm() {
   
       if (response.ok) {
         // Handle success, e.g., show a success message or redirect
-        console.log('User registered successfully');
+        //('User registered successfully');
         router.push('/'); // Redirect to login page after successful registration
       } else {
         const errorData = await response.json();

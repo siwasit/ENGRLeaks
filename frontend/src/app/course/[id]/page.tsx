@@ -12,6 +12,7 @@ import RunTimeExercise from "@/templates/runtimeIDETest";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
+import { API } from "@/utils/api";
 
 interface Lesson {
     body: string;
@@ -28,8 +29,9 @@ export default function CoursePage() {
     const [lessonIndex, setLessonIndex] = useState<number>(0);
 
     const retrieveAllLesson = async () => {
-        try {
-            const lessonsRes = await axios.get(`https://engrleaks-backend.onrender.com/lessons/course/${course_id}`);
+        try { 
+            //`lessons/course/${course_id}`
+            const lessonsRes = await axios.get(API.lessonsByCourseId(Number(course_id)));
             if (lessonsRes.status === 200) {
                 const lessonsData = lessonsRes.data.lessons.map((lesson: Lesson) => {
                     return {
@@ -47,7 +49,8 @@ export default function CoursePage() {
 
     const retrieveCourseName = async () => {
         try {
-            const resCourseName = await axios.get(`https://engrleaks-backend.onrender.com/courses/${course_id}/`)
+            //`courses/${course_id}/`
+            const resCourseName = await axios.get(API.courseById(Number(course_id)));
             if (resCourseName.status === 200) {
                 setCourseName(resCourseName.data.course_name)
             }

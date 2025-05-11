@@ -1,3 +1,4 @@
+import { API } from "@/utils/api";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -33,7 +34,8 @@ export default function StudentDetailTable() {
 
     const retrieveUsers = async () => {
         try {
-            const res = await axios.get("https://engrleaks-backend.onrender.com/users/");
+            // users
+            const res = await axios.get(API.allUsers);
             if (res.status === 200) {
                 const usersData = res.data.users;
 
@@ -62,12 +64,14 @@ export default function StudentDetailTable() {
         let formattedData: EnrollmentTableParameters[] = [];
         let idx = 1;
         try {
-            const res = await axios.get(`https://engrleaks-backend.onrender.com/enrollments/${studentId}/`);
+            // enrollments/${studentId}/
+            const res = await axios.get(API.enrollmentByUserId(studentId));
             if (res.status === 200) {
                 const enrollments = res.data.enrollments;
                 for (const e of enrollments) {
                     try {
-                        const courseRes = await axios.get(`https://engrleaks-backend.onrender.com/courses/${e.course_id}/`);
+                        // courses/${e.course_id}/
+                        const courseRes = await axios.get(API.courseById(e.course_id));
                         if (courseRes.status === 200) {
                             const rawDate = courseRes.data.created_at;
                             const formattedDate = new Date(rawDate).toLocaleDateString('en-GB');

@@ -9,6 +9,7 @@ import { Enrollment } from '@/app/mycourses/page';
 import { useRouter } from 'next/navigation';
 import { getCsrfTokenFromCookies } from '@/utils/getCsrfToken';
 import { getUserIdFromToken } from '@/utils/getUserIdFromToken';
+import { API } from '@/utils/api';
 
 
 type Course = {
@@ -90,7 +91,6 @@ const CourseFilteringSection = () => {
     const handleCourseAction = async (status: string, course_id: number) => {
         const access_token = localStorage.getItem('access_token');
         if (!access_token) {
-            console.log('here')
             router.replace('/authenticate')
             return;
         }
@@ -100,7 +100,8 @@ const CourseFilteringSection = () => {
         } else if (status === 'Enroll Now!') {
             try {
                 await axios.post(
-                    `https://engrleaks-backend.onrender.com/add_enroll/`,
+                    // add_enroll/
+                   API.addEnroll,
                     {
                         user_id: user_id,
                         course_id: course_id,
@@ -128,7 +129,8 @@ const CourseFilteringSection = () => {
             return [];
         }
         try {
-            const res = await axios.get(`https://engrleaks-backend.onrender.com/enrollments/${user_id}/`);
+            // enrollments/${user_id}/
+            const res = await axios.get(API.enrollmentByUserId(user_id));
             if (res.status === 200) {
                 const formatted: Enrollment[] = res.data.enrollments.map((enrollment: any) => ({
                     user: enrollment.user,
@@ -140,7 +142,8 @@ const CourseFilteringSection = () => {
 
                 for (const e of formatted) {
                     try {
-                        const res = await axios.get(`https://engrleaks-backend.onrender.com/courses/${e.course_id}/`);
+                        // courses/${e.course_id}/
+                        const res = await axios.get(API.courseById(e.course_id));
                         if (res.status === 200) {
                             const courseRes = res.data
                             if (e.course_id) {
@@ -179,7 +182,8 @@ const CourseFilteringSection = () => {
         retrieveStatusCourseUser(user_id);
         const fetchCourses = async () => {
             try {
-                const res = await axios.get('https://engrleaks-backend.onrender.com/courses/');
+                // courses/
+                const res = await axios.get(API.allCourses);
                 if (res.status === 200) {
                     const formatted = res.data.map((course: any) => ({
                         course_id: course.id,

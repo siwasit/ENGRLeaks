@@ -1,3 +1,4 @@
+import { API } from "@/utils/api";
 import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -70,7 +71,8 @@ export default function CourseTable() {
             creator_id: userId,
         };
 
-        axios.post("https://engrleaks-backend.onrender.com/add_course/",
+        // add_course/
+        axios.post(API.addCourse,
             newCourse,
             {
                 headers: {
@@ -84,7 +86,8 @@ export default function CourseTable() {
 
     const retrieveCourseById = async (courseId: number) => {
         try {
-            const res = await axios.get(`https://engrleaks-backend.onrender.com/courses/${courseId}/`)
+            // courses/${courseId}/
+            const res = await axios.get(API.courseById(courseId));
             if (res.status === 200) {
                 const resCourseData = res.data;
                 setCourseEditId(resCourseData.id);
@@ -106,7 +109,8 @@ export default function CourseTable() {
         };
 
         try {
-            await axios.post(`https://engrleaks-backend.onrender.com/update_course/${courseId}/`, updatedCourse, {
+            // update_course/${courseId}/
+            await axios.post(API.updateCourse(courseId), updatedCourse, {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrfToken,  // Use the fetched CSRF token
@@ -122,7 +126,8 @@ export default function CourseTable() {
     const handleDeleteCourse = async (courseId: number) => {
         const csrfToken = getCsrfTokenFromCookies(); // Fetch CSRF token
         try {
-            await axios.delete(`https://engrleaks-backend.onrender.com/delete_course/${courseId}/`, {
+            // delete_course/${courseId}/
+            await axios.delete(API.deleteCourse(courseId), {
                 headers: {
                     'X-CSRFToken': csrfToken,  // Use the fetched CSRF token
                 },
@@ -137,11 +142,13 @@ export default function CourseTable() {
     const retrieveCourse = async () => {
         const courseCount: Record<string, number> = {};
         try {
-            const res = await axios.get("https://engrleaks-backend.onrender.com/courses/")
+            // courses/
+            const res = await axios.get(API.allCourses);
             if (res.status === 200) {
                 const resCourseData = res.data;
                 try {
-                    const resSum = await axios.get("https://engrleaks-backend.onrender.com/enrollments/")
+                    // enrollments/
+                    const resSum = await axios.get(API.allEnrollment)
                     if (res.status === 200) {
                         const resSummaryData = resSum.data;
                         resSummaryData.enrollments.forEach((enrollment: Enrollment) => {

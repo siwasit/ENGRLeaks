@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { LogOut } from 'lucide-react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { API } from '@/utils/api';
 
 interface NavItem {
     label: string;
@@ -39,7 +40,7 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
         }
 
         try {
-            const res = await axios.post('https://127.0.0.1:8000/api/token/refresh/', {
+            const res = await axios.post('https://localhost:8000/api/token/refresh/', {
                 refresh: refresh_token,
             });
 
@@ -55,7 +56,8 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
 
     const getCsrfToken = async () => {
         try {
-            const response = await axios.get('https://engrleaks-backend.onrender.com/api/get_csrf/', {
+            // /api/get_csrf/
+            const response = await axios.get(API.csrfToken, {
                 withCredentials: true,
             });
 
@@ -63,7 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
 
             // Set the CSRF token in a cookie directly
             document.cookie = `csrftoken=${csrfToken}; path=/;`;
-            console.log('CSRF token set:', csrfToken);
+            //('CSRF token set:', csrfToken);
 
             return csrfToken;
         } catch (error) {

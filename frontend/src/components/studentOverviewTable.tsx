@@ -1,3 +1,4 @@
+import { API } from "@/utils/api";
 import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -11,14 +12,13 @@ interface Student {
 }
 
 export default function StudentOverviewTable() {
-    
-
     const [studentOverview, setStudentOverview] = useState<Student[]>([]);
 
     const handleDelete = async (studentId: number) => {
         const csrfToken = getCsrfTokenFromCookies(); // Assuming you have a function to get the CSRF token from cookies
         try {
-            await axios.delete(`https://engrleaks-backend.onrender.com/delete_user/${studentId}/`
+            // delete_user/${studentId}/
+            await axios.delete(API.deleteUser(studentId)
                 , {
                     headers: {
                         "X-CSRFToken": csrfToken,
@@ -35,10 +35,12 @@ export default function StudentOverviewTable() {
 
     const retrieveStudentOverview = async () => {
         try {
-            const res = await fetch("https://engrleaks-backend.onrender.com/users/");
+            // users/
+            const res = await fetch(API.allUsers);
             if (res.status === 200) {
                 const data = await res.json();
-                const resCourses = await fetch("https://engrleaks-backend.onrender.com/enrollments/");
+                // enrollments/
+                const resCourses = await fetch(API.allEnrollment);
                 if (resCourses.status === 200) {
                     const enrollmentsData = await resCourses.json();
                     const enrollments = enrollmentsData.enrollments;  // Corrected here

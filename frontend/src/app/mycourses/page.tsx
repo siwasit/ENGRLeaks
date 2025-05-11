@@ -3,7 +3,8 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import ParticlesComponent from "@/components/particle";
-import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
+import { API } from "@/utils/api";
+import { getCsrfToken } from "@/utils/getCsrfToken";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
@@ -59,7 +60,8 @@ export default function MyCoursesPage() {
         const userId = getUserIdFromToken();
         if (userId) {
             try {
-                const res = await axios.get(`https://engrleaks-backend.onrender.com/enrollments/${userId}/`);
+                // enrollments/${userId}
+                const res = await axios.get(API.enrollmentByUserId(userId));
                 if (res.status === 200) {
                     const formatted: Enrollment[] = res.data.enrollments.map((enrollment: any) => ({
                         user: enrollment.user,
@@ -87,7 +89,8 @@ export default function MyCoursesPage() {
 
         for (const enr of fetchedEnrollments) {
             try {
-                const res = await axios.get(`https://engrleaks-backend.onrender.com/courses/${enr.course_id}/`);
+                // courses/${enr.course_id}
+                const res = await axios.get(API.courseById(enr.course_id));
                 if (res.status === 200) {
                     const rawDate = res.data.created_at;
                     const formattedDate = new Date(rawDate).toLocaleDateString('en-GB');
@@ -111,7 +114,7 @@ export default function MyCoursesPage() {
     };
 
     const handleUnenroll = async (course_id: number) => {
-        const csrfToken = getCsrfTokenFromCookies();
+        const csrfToken = getCsrfToken();
         const user_id = getUserIdFromToken();
         
         if (!csrfToken) {
@@ -122,23 +125,29 @@ export default function MyCoursesPage() {
             console.error('UID not found.')
             return;
         }
-
+        
         try {
-            await axios.delete('https://engrleaks-backend.onrender.com/delete_enroll/', {
-                data: {
-                    user_id: user_id,
-                    course_id: course_id,
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken, // Use the fetched CSRF token
-                },
-                withCredentials: true, // Include cookies in the request
+            // First await the CSRF token promise to get the actual token value
+            const csrfResponse = await getCsrfToken();
+            const csrfToken = csrfResponse.token; // Extract the token from response
+            
+            // delete_enroll
+            await axios.delete(API.deleteEnroll, {
+              data: {
+                user_id: user_id,
+                course_id: course_id,
+              },
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken, // Now using the resolved token string
+              },
+              withCredentials: true,
             });
+            
             retrieveCourseData();
-        } catch (error) {
+          } catch (error) {
             console.error('Error during unenrollment:', error);
-        }
+          }
     }
 
     useEffect(() => {
