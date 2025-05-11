@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True #! Fix this
 
 ALLOWED_HOSTS = ['localhost', 'localhost', 'engrleaks-backend.onrender.com', 'engrleaks-frontend.onrender.com']
 
@@ -68,7 +68,7 @@ CORS_ALLOWED_ORIGINS = [
     'https://engrleaks-backend.onrender.com',
     "http://localhost:8000",
 ]
-CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_ALL_ORIGINS = TRUE
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
@@ -186,3 +186,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_COOKIE_DOMAIN = ".onrender.com" 
 SESSION_COOKIE_DOMAIN = ".onrender.com"
+
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
