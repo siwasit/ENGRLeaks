@@ -12,7 +12,7 @@ export const getCsrfTokenFromCookies = () => {
     for (const cookie of cookies) {
         const [key, value] = cookie.trim().split('=');
         if (key === cookieName) {
-            console.log(`CSRF token found`);
+            console.log(`CSRF token found: ${value}`);
             return value;
         }
     }
