@@ -5,7 +5,14 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://engrleaks-backend.on
 const nextConfig = {
   output: 'standalone',
   images: {
-    domains: ['placehold.co'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+    ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
