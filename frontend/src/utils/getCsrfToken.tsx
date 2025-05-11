@@ -2,7 +2,7 @@ import { API } from "./api";
 
 export const getCsrfTokenFromCookies = () => {
     if (typeof window === 'undefined') {
-        //('getCsrfToken: Not in a browser environment');
+        console.log('getCsrfToken: Not in a browser environment');
         return null;
     }
 
@@ -12,12 +12,12 @@ export const getCsrfTokenFromCookies = () => {
     for (const cookie of cookies) {
         const [key, value] = cookie.trim().split('=');
         if (key === cookieName) {
-            //(`CSRF token found: ${value}`);
+            console.log(`CSRF token found: ${value}`);
             return value;
         }
     }
 
-    //('CSRF token not found in cookies');
+    console.log('CSRF token not found in cookies');
     return null;
 };
 
