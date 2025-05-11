@@ -381,6 +381,8 @@ const RenderComponent: React.FC<{
                             style={{
                                 width: (localComponent as ImageComponent).width, height: (localComponent as ImageComponent).height
                             }}
+                            height={(((localComponent as ImageComponent).height) || '100').toString()}
+                            width={(((localComponent as ImageComponent).width) || '100').toString()}
                         />
                     )
 
@@ -603,6 +605,8 @@ const RenderComponent: React.FC<{
                                 style={{
                                     width: imageComponent.width, height: imageComponent.height
                                 }}
+                                height={imageComponent.height?.toString() || '100'}
+                                width={imageComponent.width?.toString() || '100'}
                             />
                             <input
                                 type="file"

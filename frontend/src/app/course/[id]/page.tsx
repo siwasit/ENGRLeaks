@@ -4,7 +4,7 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import ParticlesComponent from "@/components/particle";
 import CourseHeader from "@/templates/courseHeader";
-import CourseImage from "@/templates/image";
+import CourseImage from "@/templates/image_component";
 import MultipleChoiceExercise from "@/templates/multipleChoiceExercise";
 import Paragraph from "@/templates/paragraph";
 import RunTimeIDE from "@/templates/runtimeIDE";
@@ -12,6 +12,7 @@ import RunTimeExercise from "@/templates/runtimeIDETest";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
+import { API } from "@/utils/api";
 
 interface Lesson {
     body: string;
@@ -28,8 +29,9 @@ export default function CoursePage() {
     const [lessonIndex, setLessonIndex] = useState<number>(0);
 
     const retrieveAllLesson = async () => {
-        try {
-            const lessonsRes = await axios.get(`http://localhost:8000/lessons/course/${course_id}`);
+        try { 
+            //`lessons/course/${course_id}`
+            const lessonsRes = await axios.get(API.lessonsByCourseId(Number(course_id)));
             if (lessonsRes.status === 200) {
                 const lessonsData = lessonsRes.data.lessons.map((lesson: Lesson) => {
                     return {
@@ -47,7 +49,8 @@ export default function CoursePage() {
 
     const retrieveCourseName = async () => {
         try {
-            const resCourseName = await axios.get(`http://localhost:8000/courses/${course_id}/`)
+            //`courses/${course_id}/`
+            const resCourseName = await axios.get(API.courseById(Number(course_id)));
             if (resCourseName.status === 200) {
                 setCourseName(resCourseName.data.course_name)
             }
@@ -59,7 +62,7 @@ export default function CoursePage() {
     useEffect(() => {
         retrieveAllLesson();
         retrieveCourseName();
-    }, [course_id, retrieveAllLesson, retrieveCourseName])
+    }, [course_id])
 
     if (!course_id || course_id === '0') {
         return (<><p>ID not found</p></>);
@@ -90,7 +93,7 @@ export default function CoursePage() {
                             {/* <span className="relative flex items-center justify-center h-10 w-10 hover:cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
                                 {isOpen ? (
                                     <svg
-                                        xmlns="http://www.w3.org/2000/svg"
+                                        xmlns="https://www.w3.org/2000/svg"
                                         className="h-6 w-6 ml-2 transform transition-transform duration-300 rotate-180"
                                         fill="none"
                                         viewBox="0 0 24 24"
@@ -102,7 +105,7 @@ export default function CoursePage() {
                                     </svg>
                                 ) : (
                                     <svg
-                                        xmlns="http://www.w3.org/2000/svg"
+                                        xmlns="https://www.w3.org/2000/svg"
                                         className="h-6 w-6 ml-2 transform transition-transform duration-300 rotate-0"
                                         fill="none"
                                         viewBox="0 0 24 24"
@@ -178,7 +181,7 @@ export default function CoursePage() {
                                             {item.type === "CourseHeader" && <CourseHeader title={item.title} teacher_name={item.lecturer} />}
                                             {item.type === "IDERuntimeTutorial" && <RunTimeIDE initialCode={item.content} title="Tutorial" />}
                                             {item.type === "IDERuntimeExercise" && <RunTimeExercise initialCode={item.content} title="Exercise" instructions="Write an HTML heading that says 'Welcome to the IDE!' using an <h1> tag." expectedOutput="<h1>Welcome to the IDE!</h1>" />}
-                                            {item.type === "Image" && <CourseImage imageUrl={item.src ?? ""} imageDescription={item.content} />}
+                                            {item.type === "Image" && <CourseImage imageUrl={item.src ?? ""} imageDescription={item.content} width={item.width} height={item.height}/>}
                                             {item.type === "ExerciseChoice" && <MultipleChoiceExercise text={item.question} options={item.choices} correctIndex={item.correctChoice - 1} />}
                                             {/* Add more conditions for other types */}
                                         </div>

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { API } from '@/utils/api';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -20,7 +21,8 @@ export default function LoginForm() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://127.0.0.1:8000/api/token/', {
+      // /api/token/
+      const res = await axios.post(API.token, {
         email,
         password,
       });

@@ -10,9 +10,8 @@ export function getUserIdFromToken() {
     }
 
     const access_token = localStorage.getItem('access_token');
-    console.log('Access token:', access_token);  // Check what's in localStorage
+    //('Access token:', access_token);  // Check what's in localStorage
     if (!access_token) {
-        // console.error('No access token found');
         return null;
     }
 

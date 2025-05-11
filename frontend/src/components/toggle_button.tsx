@@ -56,15 +56,4 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
     );
 };
 
-// const DualToggleButton = ({}) => {
-    
-//     return (
-//         <div className="flex items-center space-x-2">
-//             <ToggleButton label="Option 1" />
-//             <ToggleButton label="Option 2" />
-//         </div>
-//     );
-// }
-
-
 export { ToggleButton };

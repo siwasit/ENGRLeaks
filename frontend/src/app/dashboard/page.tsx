@@ -7,39 +7,41 @@ import Navbar from "@/components/navbar";
 import ParticlesComponent from "@/components/particle";
 import StudentDetailTable from "@/components/studentDetail";
 import StudentOverviewTable from "@/components/studentOverviewTable";
+import { API } from "@/utils/api";
 import { getUserIdFromToken } from "@/utils/getUserIdFromToken";
 import React, { useEffect, useState } from "react";
+
+const retrieveAccount = async (setFullName: React.Dispatch<React.SetStateAction<string>>) => {
+    const userId = getUserIdFromToken();
+    if (userId) {
+        try {
+            // users/${userId}
+            const res = await fetch(API.userById(userId));
+            if (res.status === 200) {
+                const userData = await res.json();
+                setFullName(`${userData.name} ${userData.surname}`);
+            } else {
+                console.error("Failed to fetch user profile:", res.statusText);
+            }
+        } catch (error) {
+            console.error("Error fetching user profile:", error);
+        }
+    } else {
+        console.error('No user ID found');
+    }
+};
 
 export default function Dashboard() {
 
     const [active, setActive] = useState('Course');
     const [fullName, setFullName] = useState('');
 
-    const retrieveAccount = async () => {
-        const userId = getUserIdFromToken();
-        if (userId) {
-            try {
-                const res = await fetch(`http://localhost:8000/users/${userId}/`)
-                if (res.status === 200) {
-                    const userData = await res.json();
-                    setFullName(`${userData.name} ${userData.surname}`);
-                } else {
-                    console.error("Failed to fetch user profile:", res.statusText);
-                }
-            } catch (error) {
-                console.error("Error fetching user profile:", error);
-            }
-        } else {
-            console.error('No user ID found');
-        }
-    }
-
     const toggle = () => {
         setActive((prev) => (prev === 'Course' ? 'Students' : 'Course'));
     };
 
     useEffect(() => {
-        retrieveAccount();
+        retrieveAccount(setFullName);
     }, []);
 
     return (
@@ -105,8 +107,8 @@ export default function Dashboard() {
                     active === 'Course' ? (
                         <div>
                             <CourseTable />
-                            <LessonTable />
-                        </div>
+                            <LessonTable /> 
+                        </div> 
                     ) : (
                         <div>
                             <StudentOverviewTable />

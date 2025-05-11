@@ -1,3 +1,4 @@
+import { API } from "@/utils/api";
 import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -38,7 +39,8 @@ export default function CourseTable() {
 
     const retrieveCourse = async () => {
         try {
-            const res = await axios.get(`http://localhost:8000/courses/`);
+            // courses/
+            const res = await axios.get(API.allCourses);
             if (res.status === 200) {
                 const coursesData = Array.isArray(res.data) ? res.data : [];
 
@@ -54,7 +56,7 @@ export default function CourseTable() {
 
                 const updatedCourseData = [blankCourse, ...coursesData];
 
-                // console.log(updatedCourseData);
+                // //(updatedCourseData);
                 setCourses(updatedCourseData);
             } else {
                 console.error("Failed to retrieve courses:", res.statusText);
@@ -67,7 +69,8 @@ export default function CourseTable() {
     const handleLessonDelete = async (lesson_id: string) => {
         const csrfToken = getCsrfTokenFromCookies();
         try {
-            await axios.delete(`http://localhost:8000/delete_lessons/${lesson_id}`, {
+            // delete_lessons/${lesson_id}
+            await axios.delete(API.deleteLesson(lesson_id), {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrfToken, // Use the fetched CSRF token
@@ -86,7 +89,8 @@ export default function CourseTable() {
 
     const retrieveLessonByCourseId = async (course_id: string) => {
         try {
-            const res = await axios.get(`http://localhost:8000/lessons/course/${course_id}`);
+            // lessons/course/${course_id}
+            const res = await axios.get(API.lessonsByCourseId(Number(course_id)));
             if (res.status === 200) {
                 const lessons = res.data.lessons;
 

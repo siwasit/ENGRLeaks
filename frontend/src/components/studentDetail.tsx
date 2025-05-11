@@ -1,5 +1,28 @@
+import { API } from "@/utils/api";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+
+type EnrollmentTableParameters = {
+    id: number
+    title: string;
+    progress: string;
+    enrollDate: string;
+    status: string;
+};
+
+interface Course {
+    id: number;
+    course_name: string;
+    total_lessons: number;
+}
+
+interface Enrollment {
+    id: number;
+    course_id: string;
+    course__course_name: string;
+    total_lesson: number;
+    learned_lesson: number;
+}
 
 export default function StudentDetailTable() {
 
@@ -7,31 +30,12 @@ export default function StudentDetailTable() {
     const [users, setUsers] = useState<{ id: number; email: string; account_name: string; name: string; surname: string; role: string; created_at: string }[]>([]);
     const [enrolledCourses, setEnrolledCourses] = useState<EnrollmentTableParameters[]>([]);
 
-    type EnrollmentTableParameters = {
-        id: number
-        title: string;
-        progress: string;
-        enrollDate: string;
-        status: string;
-    };
-
-    interface Course {
-        id: number;
-        course_name: string;
-        total_lessons: number;
-    }
-
-    interface Enrollment {
-        id: number;
-        course_id: string;
-        course__course_name: string;
-        total_lesson: number;
-        learned_lesson: number;
-    }
+    
 
     const retrieveUsers = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/users/");
+            // users
+            const res = await axios.get(API.allUsers);
             if (res.status === 200) {
                 const usersData = res.data.users;
 
@@ -60,12 +64,14 @@ export default function StudentDetailTable() {
         let formattedData: EnrollmentTableParameters[] = [];
         let idx = 1;
         try {
-            const res = await axios.get(`http://localhost:8000/enrollments/${studentId}/`);
+            // enrollments/${studentId}/
+            const res = await axios.get(API.enrollmentByUserId(studentId));
             if (res.status === 200) {
                 const enrollments = res.data.enrollments;
                 for (const e of enrollments) {
                     try {
-                        const courseRes = await axios.get(`http://localhost:8000/courses/${e.course_id}/`);
+                        // courses/${e.course_id}/
+                        const courseRes = await axios.get(API.courseById(e.course_id));
                         if (courseRes.status === 200) {
                             const rawDate = courseRes.data.created_at;
                             const formattedDate = new Date(rawDate).toLocaleDateString('en-GB');
@@ -100,7 +106,7 @@ export default function StudentDetailTable() {
         if (selectedStudent) {
             retrieveUsersEnrolledCourses(selectedStudent);
         }
-    }, [selectedStudent, retrieveUsersEnrolledCourses]);
+    }, [selectedStudent]);
 
     return (
         <div className="flex flex-col my-4">

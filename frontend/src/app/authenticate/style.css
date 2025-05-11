@@ -206,7 +206,7 @@ input::placeholder {
     height: 40px;
     border-radius: 30px;
     border-color: #851515;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%2300000080" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%2300000080" height="20" viewBox="0 0 24 24" width="20" xmlns="https://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 16px;
@@ -217,7 +217,7 @@ input::placeholder {
     height: 40px;
     border-radius: 30px;
     border-color: #851515;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%2300000080" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%2300000080" height="20" viewBox="0 0 24 24" width="20" xmlns="https://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 16px;

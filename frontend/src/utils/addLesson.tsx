@@ -1,10 +1,11 @@
 import axios from "axios";
 import { getCsrfTokenFromCookies } from "./getCsrfToken";
 import { getUserIdFromToken } from "./getUserIdFromToken";
+import { API } from "./api";
 
 const addLesson = async (courseId: string, lessonName: string, body: string): Promise<number | null> => {
   const csrfToken = getCsrfTokenFromCookies(); // Fetch CSRF token
-  console.log(csrfToken)
+  //(csrfToken)
   if (!csrfToken) {
     alert("CSRF token not found.");
     return null;
@@ -19,7 +20,8 @@ const addLesson = async (courseId: string, lessonName: string, body: string): Pr
 
   try {
     const response = await axios.post(
-      `http://localhost:8000/add_lesson/${courseId}`,
+      // add_lesson/${courseId}
+      API.addLesson(courseId),
       {
         lesson_name: lessonName,
         body: body,

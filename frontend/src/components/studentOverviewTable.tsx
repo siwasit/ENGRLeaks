@@ -1,22 +1,24 @@
+import { API } from "@/utils/api";
 import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-export default function StudentOverviewTable() {
-    interface Student {
-        id: number;
-        name: string;
-        surname: string;
-        email: string;
-        courses: string;
-    }
+interface Student {
+    id: number;
+    name: string;
+    surname: string;
+    email: string;
+    courses: string;
+}
 
+export default function StudentOverviewTable() {
     const [studentOverview, setStudentOverview] = useState<Student[]>([]);
 
     const handleDelete = async (studentId: number) => {
         const csrfToken = getCsrfTokenFromCookies(); // Assuming you have a function to get the CSRF token from cookies
         try {
-            await axios.delete(`http://localhost:8000/delete_user/${studentId}/`
+            // delete_user/${studentId}/
+            await axios.delete(API.deleteUser(studentId)
                 , {
                     headers: {
                         "X-CSRFToken": csrfToken,
@@ -33,10 +35,12 @@ export default function StudentOverviewTable() {
 
     const retrieveStudentOverview = async () => {
         try {
-            const res = await fetch("http://localhost:8000/users/");
+            // users/
+            const res = await fetch(API.allUsers);
             if (res.status === 200) {
                 const data = await res.json();
-                const resCourses = await fetch("http://localhost:8000/enrollments/");
+                // enrollments/
+                const resCourses = await fetch(API.allEnrollment);
                 if (resCourses.status === 200) {
                     const enrollmentsData = await resCourses.json();
                     const enrollments = enrollmentsData.enrollments;  // Corrected here
@@ -64,7 +68,7 @@ export default function StudentOverviewTable() {
 
     useEffect(() => {
         retrieveStudentOverview();
-    }, [retrieveStudentOverview]);
+    }, []);
 
 
     return (

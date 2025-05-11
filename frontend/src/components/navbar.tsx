@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { LogOut } from 'lucide-react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { API } from '@/utils/api';
 
 interface NavItem {
     label: string;
@@ -16,7 +17,6 @@ const authenticatedNavItems: NavItem[] = [
     { label: 'Courses', href: '/' },
     { label: 'My Courses', href: '/mycourses' },
     { label: 'Profile', href: '/profile' },
-    // { label: 'Sign in', href: '/' },
 ];
 
 const unauthenticatedNavItems: NavItem[] = [
@@ -40,11 +40,11 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
         }
 
         try {
-            const res = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+            // /api/token/refresh/
+            const res = await axios.post(API.refreshToken, {
                 refresh: refresh_token,
             });
 
-            // Update the access token in localStorage
             localStorage.setItem('access_token', res.data.access);
         } catch (error) {
             console.error('Failed to refresh token', error);
@@ -52,17 +52,23 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
     };
 
     const handleSignIn = () => {
-        router.push('/authenticate');  // Replace with your authentication page route
+        router.push('/authenticate');
     };
 
     const getCsrfToken = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/get_csrf/', {
-                withCredentials: true,  // Include cookies in request
+            // /api/get_csrf/
+            const response = await axios.get(API.csrfToken, {
+                withCredentials: true,
             });
 
-            document.cookie = `csrftoken=${response.data.csrfToken}; path=/;`;
-            return response
+            const csrfToken = response.data.csrfToken;
+
+            // Set the CSRF token in a cookie directly
+            document.cookie = `csrftoken=${csrfToken}; path=/;`;
+            //('CSRF token set:', csrfToken);
+
+            return csrfToken;
         } catch (error) {
             console.error('Error fetching CSRF token:', error);
             return null;
@@ -73,7 +79,6 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
         const accessToken = localStorage.getItem('access_token');
 
         if (!accessToken) {
-            // Redirect to home page if no access token
             window.location.href = '/';
         }
     };
@@ -82,28 +87,27 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         setIsLogin(false);
-        // router.push('/');  // Redirect to login page
         window.location.href = '/';
     };
 
     useEffect(() => {
         const access_token = localStorage.getItem('access_token');
-        const refresh_token = localStorage.getItem('refresh_token');
         if (access_token) {
             setIsLogin(true);
-        } else {
-            console.log('No token found');
         }
-        if (!localStorage.getItem('csrf_token_initialized')) {
-            getCsrfToken();
-            localStorage.setItem('csrf_token_initialized', 'true');
+
+        const csrfTokenFromCookies = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrftoken='))
+            ?.split('=')[1];
+
+        if (!csrfTokenFromCookies) {
+            getCsrfToken(); // Fetch CSRF token if not found in cookies
         }
-    }, []);  // Empty dependency array ensures it runs only on client-side mount
+    }, []);  // Runs only once on component mount
 
     return (
-        <nav
-            className="bg-[#851515] px-2 md:px-10"
-        >
+        <nav className="bg-[#851515] px-2 md:px-10">
             <div className="container mx-auto flex items-center justify-between">
                 <div className="flex items-center">
                     <Image
@@ -141,7 +145,7 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
                             </li>
                         ))}
                     </ul>
-                    <div className='ml-4'>
+                    <div className="ml-4">
                         {isLogin ? (
                             <button
                                 className="bg-[#C5211C] py-2 px-4 rounded flex items-center justify-center hover:cursor-pointer hover:bg-[#E90B0B] transition-colors"
@@ -163,8 +167,7 @@ const Navbar: React.FC<NavbarProps> = ({ activePage }) => {
                                     Sign in
                                 </p>
                             </button>
-                        )
-                        }
+                        )}
                     </div>
                 </div>
             </div>
