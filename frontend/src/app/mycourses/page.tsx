@@ -4,7 +4,7 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import ParticlesComponent from "@/components/particle";
 import { API } from "@/utils/api";
-import { getCsrfToken } from "@/utils/getCsrfToken";
+import { getCsrfTokenFromCookies } from "@/utils/getCsrfToken";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
@@ -114,7 +114,7 @@ export default function MyCoursesPage() {
     };
 
     const handleUnenroll = async (course_id: number) => {
-        const csrfToken = getCsrfToken();
+        const csrfToken = getCsrfTokenFromCookies();
         const user_id = getUserIdFromToken();
         
         if (!csrfToken) {
@@ -128,9 +128,6 @@ export default function MyCoursesPage() {
         
         try {
             // First await the CSRF token promise to get the actual token value
-            const csrfResponse = await getCsrfToken();
-            const csrfToken = csrfResponse.token; // Extract the token from response
-            
             // delete_enroll
             await axios.delete(API.deleteEnroll, {
               data: {
