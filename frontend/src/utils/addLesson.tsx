@@ -42,7 +42,7 @@ const addLesson = async (courseId: string, lessonName: string, body: string): Pr
     return response.status; // Return the status code
   } catch (error) {
     console.error("Error creating lesson:", error);
-    alert("Failed to create lesson. Please try again.");
+    alert(`Failed to create lesson. Please try again.: ${error}`);
     return null; // Return null in case of an error
   }
 };
