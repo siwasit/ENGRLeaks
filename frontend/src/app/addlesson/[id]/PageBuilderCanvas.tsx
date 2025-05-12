@@ -27,6 +27,7 @@ import {
     // P as PIcon, // Removed as 'P' is not exported by 'lucide-react'
 } from 'lucide-react';
 import addLesson from '@/utils/addLesson';
+import { getCsrfTokenFromCookies } from '@/utils/getCsrfToken';
 
 
 // ===============================
@@ -728,7 +729,7 @@ const PageBuilderCanvas = () => {
     useEffect(() => {
         setComponents((prevComponents) => [...prevComponents]); // Ensure components are initialized
         if (!localStorage.getItem('csrf_token_initialized')) {
-            getCsrfToken();
+            getCsrfTokenFromCookies();
             localStorage.setItem('csrf_token_initialized', 'true');
         }
     }, []);
@@ -1092,8 +1093,4 @@ const PageBuilderCanvas = () => {
 };
 
 export default PageBuilderCanvas;
-
-function getCsrfToken() {
-    throw new Error('Function not implemented.');
-}
 
